@@ -1,7 +1,7 @@
 import { noVerifyCopyPlanData, verifyCopyPlanData, directPvPlanData, verifyCopydirectPvPlan,
   directImagePlanData, directImagePvPlan, indirectMultipleProjects, directMultipleProjects, changeTargetNamespace,
   IndirectChangeTargetNamespace } from './cluster_config';
-import { login } from '../../utils/utils';
+import { login, setup_source_cluster, cleanup_source_cluster, post_migration_verification } from '../../utils/utils';
 import { Plan } from '../models/plan'
 
 // TO DO: Automate deployment of application and verify that the application is running before initiating
@@ -31,6 +31,7 @@ describe('Automated tests to do direct and indirect migrations using Amazon S3 u
     const [Data, migrationType] = $type;
 
     it(`${migrationType}`, () => {
+      setup_source_cluster();
       plan.create(Data);
       plan.execute(Data);
       if (`${migrationType}` == 'Rollover indirect migration and then migrate' ||
@@ -39,6 +40,8 @@ describe('Automated tests to do direct and indirect migrations using Amazon S3 u
         plan.execute(Data);
       }
       plan.delete(Data);
+      cleanup_source_cluster();
+      post_migration_verification();
     });
   });
 })
