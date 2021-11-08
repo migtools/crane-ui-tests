@@ -50,22 +50,39 @@ export function setup_source_cluster(): void {
 
   cy.exec(`${sourceCluster} --insecure-skip-tls-verify`, { failOnNonZeroExit: true });
   //If project exists, delete the project before proceeding
+  cy.exec(`oc delete project nandini`);
   cy.exec(`oc new-project nandini`, { failOnNonZeroExit: true });
   cy.exec(`oc new-app django-psql-persistent`, { failOnNonZeroExit: true });
 
-  //Verify that application is running
+  //Verify that application is running before initiating migration
   cy.exec(`curl $(oc get routes -n nandini | grep django| awk '{print $2}')`, { failOnNonZeroExit: true } )
+}
+
+export function setup_target_cluster(): void {
+  //This function deletes any existing plan(s) and target namespace on the target cluster.
+  //TO DO: Remove hardcoding of project name.
+
+  cy.exec(`${targetCluster} --insecure-skip-tls-verify`, { failOnNonZeroExit: true });
+  //If target namespace already exists, delete the namespace before proceeding
+  cy.exec(`oc delete project nandini`, { failOnNonZeroExit: false }).then((result => {
+    expect(result.stderr).to.contain('Error from server (NotFound): namespaces "nandini" not found')
+  }));
+  cy.exec(`oc delete migplan --all -n openshift-migration`, { failOnNonZeroExit: true });
 }
 
 export function cleanup_source_cluster(): void {
   //This function deletes the project in which the application(to be migrated)exists.
   cy.exec(`${sourceCluster} --insecure-skip-tls-verify`, { failOnNonZeroExit: true });
-  cy.exec('oc delete project nandini', { failOnNonZeroExit: true });
+  cy.exec(`oc delete project nandini`, { failOnNonZeroExit: false }).then((result => {
+    expect(result.stderr).to.contain('Error from server (NotFound): namespaces "nandini" not found')
+  }));
 }
 
-export function post_migration_verification(): void {
+export function post_migration_verification_on_target(): void {
   //This function verifies that application is running fine on the target cluster after migration.
   cy.exec(`${targetCluster} --insecure-skip-tls-verify`, { failOnNonZeroExit: true });
   cy.exec(`curl $(oc get routes -n nandini | grep django| awk '{print $2}')`, { failOnNonZeroExit: true });
-  cy.exec(`oc delete project nandini`, { failOnNonZeroExit: true });
+  cy.exec(`oc delete project nandini`, { failOnNonZeroExit: false }).then((result => {
+    expect(result.stderr).to.contain('Error from server (NotFound): namespaces "nandini" not found')
+  }));
 }
