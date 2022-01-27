@@ -28,7 +28,6 @@ describe('Automated tests to do direct and indirect migrations', () => {
     const [Data, migrationType] = $type;
 
     it(`${migrationType}`, () => {
-      cy.wait(10000);
       login();
       cy.exec(`"${configurationScript}" setup_source_cluster ${Data.namespaceList} "${sourceCluster}"`, { timeout: 200000 });
       cy.exec(`"${configurationScript}" setup_target_cluster ${Data.namespaceList} "${targetCluster}"`, { timeout: 200000 });
