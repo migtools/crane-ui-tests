@@ -1,0 +1,25 @@
+{
+    "viewportWidth": 1280,
+    "viewportHeight": 880,
+    "video": false,
+    "env": {
+        "user": "",
+        "pass": "",
+        "tackleUrl": ""
+    },
+    "reporter": "cypress-multi-reporters",
+    "reporterOptions": {
+        "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+        "cypressMochawesomeReporterReporterOptions": {
+            "reportDir": "cypress/reports",
+            "charts": true,
+            "reportPageTitle": "Tackle Test Suite",
+            "embeddedScreenshots": true,
+            "inlineAssets": true
+        },
+        "mochaJunitReporterReporterOptions": {
+            "mochaFile": "cypress/reports/junit/results-[hash].xml"
+        }
+    },
+    "defaultCommandTimeout": 8000
+}

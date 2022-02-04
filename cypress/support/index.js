@@ -18,3 +18,6 @@ import './commands';
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Use to create XML report file
+import "cypress-mochawesome-reporter/register";
