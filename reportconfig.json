@@ -3,9 +3,11 @@
     "viewportHeight": 880,
     "video": false,
     "env": {
-        "user": "",
-        "pass": "",
-        "tackleUrl": ""
+        "user": "kubeadmin",
+        "pass": "best-password-ever",
+        "craneUrl": "https://migration-openshift-migration.apps.devcluster.openshift.com",
+        "sourceCluster": "https://api.cam-src.devcluster.openshift.com:6443 -u kubeadmin -p password",
+        "targetCluster": "https://api.cam.tgt.devcluster.openshift.com:6443 -u kubeadmin -p password"
     },
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
@@ -13,7 +15,7 @@
         "cypressMochawesomeReporterReporterOptions": {
             "reportDir": "cypress/reports",
             "charts": true,
-            "reportPageTitle": "Tackle Test Suite",
+            "reportPageTitle": "Crane Test Suite",
             "embeddedScreenshots": true,
             "inlineAssets": true
         },

@@ -35,4 +35,4 @@ module.exports = (on) => {
         await exec("npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml");
         await afterRunHook();
     });
-});
+};
