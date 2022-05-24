@@ -1,11 +1,10 @@
 import { PlanData } from '../types/types';
-import { clickByText, click, inputText, next, selectFromDroplist, getTd } from '../../utils/utils';
+import { clickByText, click, inputText, next, selectFromDroplist, getTd, fillGeneralFields, searchAndSelectNamespace, editTargetNamespace } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import { planNameInput, searchInput, searchButton, directPvMigrationCheckbox, verifyCopyCheckbox,
-  directImageMigrationCheckbox, dataLabel, kebab, kebabDropDownItem, editTargetNamepace } from '../views/plan.view';
+  directImageMigrationCheckbox, dataLabel, kebab, kebabDropDownItem, editTargetNamepace, targetNamespace, saveEdit } from '../views/plan.view';
 
-const saveEdit = 'button[aria-label*=Save]';
-const targetNamespace = 'input[name="currentTargetNamespaceName"]';
+
 
 export class Plan {
   protected static openList(): void {
@@ -14,39 +13,36 @@ export class Plan {
   
   protected generalStep(planData: PlanData): void {
     const { name, source, target, repo, migration_type } = planData;
-    inputText(planNameInput, name);
-    selectFromDroplist('Select', migration_type)
-    selectFromDroplist('Select source', source);
-
-    if (migration_type != 'Storage class conversion') {
-      selectFromDroplist('Select target', target);
-      selectFromDroplist('Select repository', repo);
-    }
+    fillGeneralFields(name, source, target, repo, migration_type)
     next();
   }
 
   protected selectNamespace(planData: PlanData): void {
     const { namespaceList, nondefaultTargetNamespace } = planData;
     namespaceList.forEach((name) => {
-      inputText(searchInput, name);
-      cy.get(searchButton).first().click();
-      cy.get('td')
-        .contains(name)
-        .parent('tr')
-        .within(() => {
-          click('input');
-        });
+
+      searchAndSelectNamespace(name);
+
+      // inputText(searchInput, name);
+      // cy.get(searchButton).first().click();
+      // cy.get('td')
+      //   .contains(name)
+      //   .parent('tr')
+      //   .within(() => {
+      //     click('input');
+      //   });
 
       //Update target namespace if project is being migrated to non default namespace
       if (nondefaultTargetNamespace) {
-        cy.get('td')
-          .contains(name)
-          .parent('tr')
-          .within(() => {
-            click(editTargetNamepace);
-        });
-        inputText(targetNamespace, 'non-default');
-        click(saveEdit);
+        editTargetNamespace(name);
+        // cy.get('td')
+        //   .contains(name)
+        //   .parent('tr')
+        //   .within(() => {
+        //     click(editTargetNamepace);
+        // });
+        // inputText(targetNamespace, 'non-default');
+        // click(saveEdit);
       }
     });
     next();
@@ -91,7 +87,7 @@ export class Plan {
     clickByText('button', 'Next');
   }
 
-  protected run(name: string, migration_type: string): void {
+  protected run(name: string): void {
     cy.get('th')
       .contains(name)
       .parent('tr')
@@ -99,10 +95,7 @@ export class Plan {
         click(kebab);
     });
     clickByText(kebabDropDownItem, 'Cutover');
-    if (migration_type == 'Full migration') {
-      // This option is available for full migration.
-      cy.get('#transaction-halt-checkbox').uncheck()
-    }
+    cy.get('#transaction-halt-checkbox').uncheck()
     //Confirm dialog before migration
     clickByText('button', 'Migrate');
   }
@@ -160,16 +153,9 @@ export class Plan {
     this.generalStep(planData);
     this.selectNamespace(planData);
     this.persistentVolumes();
-    
-    if (planData.migration_type == 'State migration') { 
-      this.copyOptions(planData);
-    }
-    
-    if (planData.migration_type == 'Full migration') {
-      this.copyOptions(planData);
-      this.migrationOptions(planData);
-      this.hooks();
-    }
+    this.copyOptions(planData);
+    this.migrationOptions(planData);
+    this.hooks();
 
     //Assert that plan is successfully validated before being run
     cy.get('span#condition-message').should('contain', 'The migration plan is ready', { timeout : 10000 });
@@ -180,9 +166,9 @@ export class Plan {
   }
 
   execute(planData: PlanData): void {
-    const { name, migration_type } = planData;
+    const { name } = planData;
     Plan.openList();
-    this.run(name, migration_type);
+    this.run(name);
     this.waitForSuccess(name);
   }
 

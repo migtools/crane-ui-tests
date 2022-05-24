@@ -1,4 +1,7 @@
+import { pages } from '../integration/views/enums.view';
 import * as loginView from '../integration/views/login.view';
+import { navMenuPoint } from '../integration/views/menu.view';
+import { editTargetNamepace, planNameInput, saveEdit, searchButton, searchInput, targetNamespace } from '../integration/views/plan.view';
 
 const userName = Cypress.env('user');
 const userPassword = Cypress.env('password');
@@ -45,3 +48,40 @@ export function getTd(columnValue: string, locator: string, tdValue: string): vo
       cy.get(locator).contains(tdValue, { timeout: 2000 });
     });
 }
+
+export function searchAndSelectNamespace(namespace: string): void {
+    inputText(searchInput, namespace);
+    cy.get(searchButton).first().click();
+    cy.get('td')
+      .contains(namespace)
+      .parent('tr')
+      .within(() => {
+        click('input');
+      })
+}
+
+export function navigateToPage(pageName: pages): void {
+  clickByText(navMenuPoint, pageName);
+}
+
+export function fillGeneralFields(name, source, target, repo, migration_type): void {
+  inputText(planNameInput, name);
+  selectFromDroplist('Select', migration_type)
+  selectFromDroplist('Select source', source);
+  if (migration_type == 'Full migration' || migration_type == 'State migration') {
+    selectFromDroplist('Select target', target);
+  }
+  selectFromDroplist('Select repository', repo);
+}
+
+export function editTargetNamespace(namespace): void {
+  cy.get('td')
+  .contains(namespace)
+  .parent('tr')
+  .within(() => {
+    click(editTargetNamepace);
+});
+inputText(targetNamespace, namespace+'-new');
+click(saveEdit);
+}
+
