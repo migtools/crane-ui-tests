@@ -42,7 +42,7 @@ describe('Automated tests to do direct and indirect migrations and Basic Pipelin
         else {
             const scc_cluster = targetCluster
         }
-        cy.exec(`"${configurationScript}" setup_source_cluster ${Data.namespaceList} "${scc_cluster}"`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_source_cluster ${Data.namespaceList} ${scc_cluster}`, { timeout: 200000 });
       }
       else {
         cy.exec(`"${configurationScript}" setup_source_cluster ${Data.namespaceList} ${sourceCluster}`, { timeout: 200000 });
