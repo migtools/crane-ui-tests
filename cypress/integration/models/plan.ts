@@ -169,9 +169,9 @@ export class Plan {
   }
 
   execute(planData: PlanData): void {
-    const { name } = planData;
+    const { name, migration_type } = planData;
     Plan.openList();
-    this.run(name);
+    this.run(name, migration_type);
     this.waitForSuccess(name);
   }
 
