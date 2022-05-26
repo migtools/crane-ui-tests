@@ -16,5 +16,7 @@
             "mochaFile": "cypress/reports/junit/results-[hash].xml"
         }
     },
-    "defaultCommandTimeout": 8000
+    "defaultCommandTimeout": 8000,
+    "videoCompression": false
+
 }
