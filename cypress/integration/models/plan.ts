@@ -1,11 +1,10 @@
 import { PlanData } from '../types/types';
-import { clickByText, click, inputText, next, selectFromDroplist, getTd } from '../../utils/utils';
+import { clickByText, click, inputText, next, selectFromDroplist, getTd, fillGeneralFields, searchAndSelectNamespace, editTargetNamespace } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import { planNameInput, searchInput, searchButton, directPvMigrationCheckbox, verifyCopyCheckbox,
-  directImageMigrationCheckbox, dataLabel, kebab, kebabDropDownItem, editTargetNamepace } from '../views/plan.view';
+  directImageMigrationCheckbox, dataLabel, kebab, kebabDropDownItem, editTargetNamepace, targetNamespace, saveEdit } from '../views/plan.view';
 
-const saveEdit = 'button[aria-label*=Save]';
-const targetNamespace = 'input[name="currentTargetNamespaceName"]';
+
 
 export class Plan {
   protected static openList(): void {
@@ -14,39 +13,36 @@ export class Plan {
   
   protected generalStep(planData: PlanData): void {
     const { name, source, target, repo, migration_type } = planData;
-    inputText(planNameInput, name);
-    selectFromDroplist('Select', migration_type)
-    selectFromDroplist('Select source', source);
-
-    if (migration_type != 'Storage class conversion') {
-      selectFromDroplist('Select target', target);
-      selectFromDroplist('Select repository', repo);
-    }
+    fillGeneralFields(name, source, target, repo, migration_type)
     next();
   }
 
   protected selectNamespace(planData: PlanData): void {
     const { namespaceList, nondefaultTargetNamespace } = planData;
     namespaceList.forEach((name) => {
-      inputText(searchInput, name);
-      cy.get(searchButton).first().click();
-      cy.get('td')
-        .contains(name)
-        .parent('tr')
-        .within(() => {
-          click('input');
-        });
+
+      searchAndSelectNamespace(name);
+
+      // inputText(searchInput, name);
+      // cy.get(searchButton).first().click();
+      // cy.get('td')
+      //   .contains(name)
+      //   .parent('tr')
+      //   .within(() => {
+      //     click('input');
+      //   });
 
       //Update target namespace if project is being migrated to non default namespace
       if (nondefaultTargetNamespace) {
-        cy.get('td')
-          .contains(name)
-          .parent('tr')
-          .within(() => {
-            click(editTargetNamepace);
-        });
-        inputText(targetNamespace, 'non-default');
-        click(saveEdit);
+        editTargetNamespace(name);
+        // cy.get('td')
+        //   .contains(name)
+        //   .parent('tr')
+        //   .within(() => {
+        //     click(editTargetNamepace);
+        // });
+        // inputText(targetNamespace, 'non-default');
+        // click(saveEdit);
       }
     });
     next();
@@ -178,7 +174,6 @@ export class Plan {
     //Wait for plan to be in 'Ready' state
     this.waitForReady(name);
   }
-
   execute(planData: PlanData): void {
     const { name, migration_type } = planData;
     Plan.openList();
