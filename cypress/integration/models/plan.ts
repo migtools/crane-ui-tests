@@ -156,9 +156,16 @@ export class Plan {
     this.generalStep(planData);
     this.selectNamespace(planData);
     this.persistentVolumes();
-    this.copyOptions(planData);
-    this.migrationOptions(planData);
-    this.hooks();
+    
+    if (planData.migration_type == 'State migration') { 
+      this.copyOptions(planData);
+    }
+    
+    if (planData.migration_type == 'Full migration') {
+      this.copyOptions(planData);
+      this.migrationOptions(planData);
+      this.hooks();
+    }
 
     //Assert that plan is successfully validated before being run
     cy.get('span#condition-message').should('contain', 'The migration plan is ready', { timeout : 10000 });
@@ -167,7 +174,6 @@ export class Plan {
     //Wait for plan to be in 'Ready' state
     this.waitForReady(name);
   }
-
   execute(planData: PlanData): void {
     const { name, migration_type } = planData;
     Plan.openList();
