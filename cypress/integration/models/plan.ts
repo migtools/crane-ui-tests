@@ -87,7 +87,7 @@ export class Plan {
     clickByText('button', 'Next');
   }
 
-  protected run(name: string): void {
+  protected run(name: string, migration_type: string): void {
     cy.get('th')
       .contains(name)
       .parent('tr')
@@ -95,7 +95,10 @@ export class Plan {
         click(kebab);
     });
     clickByText(kebabDropDownItem, 'Cutover');
-    cy.get('#transaction-halt-checkbox').uncheck()
+    if (migration_type == 'Full migration') {
+      // This option is available for full migration.
+      cy.get('#transaction-halt-checkbox').uncheck()
+    }
     //Confirm dialog before migration
     clickByText('button', 'Migrate');
   }
