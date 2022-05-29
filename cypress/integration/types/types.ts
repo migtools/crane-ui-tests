@@ -2,6 +2,7 @@ export type ClusterData = {
     name: string;
     url: string;
     token: string;
+    registryPath?: string;
 };
 
 export type RepoData = {
