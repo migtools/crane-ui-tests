@@ -86,38 +86,3 @@ export function editTargetNamespace(namespace): void {
 inputText(targetNamespace, namespace+'-new');
 click(saveEdit);
 }
-
-
-export function addCluster(cluster_name: string, cluster_url: string, sa_token: string, exposed_registry_path: string): void {
-  click(addNewCluster)
-  inputText(clusterName, cluster_name)
-  inputText(clusterUrl, cluster_url)
-  inputText(instanceToken, sa_token)
-  inputText(exposedRegistryPath, exposed_registry_path)
-}
-
-export function createMigplan(planData: PlanData): void {
-  const { name } = planData;
-
-  clickByText('button', 'Add migration plan');
-  this.generalStep(planData);
-  this.selectNamespace(planData);
-  this.persistentVolumes();
-  
-  if (planData.migration_type == 'State migration') { 
-    this.copyOptions(planData);
-  }
-  
-  if (planData.migration_type == 'Full migration') {
-    this.copyOptions(planData);
-    this.migrationOptions(planData);
-    this.hooks();
-  }
-
-  //Assert that plan is successfully validated before being run
-  cy.get('span#condition-message').should('contain', 'The migration plan is ready', { timeout : 10000 });
-  cy.wait(500).findByText("Close").click();
-
-  //Wait for plan to be in 'Ready' state
-  this.waitForReady(name);
-}
