@@ -33,10 +33,11 @@ selectorTuple.forEach(($type) => {
   const [planData, migrationType] = $type;
   let scc_cluster = null
   describe(`'${migrationType}'`, () => {
-    cy.wait(10000)
 
     // run before the all coming tests
     before('Setting up Clusters', () => {
+      cy.wait(10000)
+
       if (`${planData.migration_type}` == 'Storage class conversion') {
 
         (`${planData.source}` == 'source-cluster') ? scc_cluster = sourceCluster : scc_cluster = targetCluster
