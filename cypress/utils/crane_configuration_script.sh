@@ -36,8 +36,19 @@ setup_crane() {
 
 clean_crane() {
     # rm -Rf ./crane_temp
+
+    oc login ${SRC_CLUSTER} --insecure-skip-tls-verify
+
     if (oc get project openvpn-tunnel-namespace 2>/dev/null); then
         oc delete project openvpn-tunnel-namespace
+        sleep 30
+    fi
+
+    oc login ${TGT_CLUSTER} --insecure-skip-tls-verify
+
+    if (oc get project openvpn-tunnel-namespace 2>/dev/null); then
+        oc delete project openvpn-tunnel-namespace
+        sleep 30
     fi
 }
 

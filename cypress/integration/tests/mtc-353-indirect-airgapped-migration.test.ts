@@ -72,7 +72,7 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
     after('Validat Migration & Clean up resources', () => {
         cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 });
         cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 100000 });
-        cy.exec(`"${craneConfigurationScript}" clean_crane`);
+        cy.exec(`"${craneConfigurationScript}" clean_crane "${sourceCluster}" "${targetCluster}"`);
     });
 
 });
