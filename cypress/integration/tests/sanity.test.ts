@@ -46,11 +46,11 @@ selectorTuple.forEach(($type) => {
 
         (`${planData.source}` == 'source-cluster') ? scc_cluster = sourceCluster : scc_cluster = targetCluster
 
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} "${scc_cluster}"`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${scc_cluster}`, { timeout: 200000 });
       }
       else {
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 200000 });
-        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} "${targetCluster}"`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, { timeout: 200000 });
       }
     });
 
@@ -77,11 +77,11 @@ selectorTuple.forEach(($type) => {
       plan.delete(planData);
 
       if (`${planData.migration_type}` == 'Storage class conversion') {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 });
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 });
       }
       else {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 });
-        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 100000 });
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 });
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 100000 });
       }
     });
   });
