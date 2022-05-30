@@ -32,8 +32,8 @@ const selectorTuple: [PlanData, String][] = [
 selectorTuple.forEach(($type) => {
   const [planData, migrationType] = $type;
   let scc_cluster = null
-  cy.wait(10000)
   describe(`'${migrationType}'`, () => {
+    cy.wait(10000)
 
     // run before the all coming tests
     before('Setting up Clusters', () => {
