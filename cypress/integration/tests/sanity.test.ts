@@ -1,4 +1,4 @@
-import { directImagePlanData } from './cluster_config';
+import { changeTargetNamespace, directImagePlanData, directImagePvPlan, directMultipleProjects, directPvPlanData, IndirectChangeTargetNamespace, indirectMultipleProjects, InterclusterState, noVerifyCopyPlanData, storageClassConversionSource, storageClassConversionTarget, verifyCopydirectPvPlan, verifyCopyPlanData } from './cluster_config';
 import { login } from '../../utils/utils';
 import { Plan } from '../models/plan'
 import { PlanData } from '../types/types';
@@ -11,22 +11,22 @@ const plan = new Plan();
 
 const selectorTuple: [PlanData, String][] = [
   [directImagePlanData, 'Direct image migration without copy verification'],
-  // [directPvPlanData, 'Direct PV migration without copy verification'],
-  // [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
-  // [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
-  // [verifyCopyPlanData, 'Direct migration with copy verification'],
-  // [noVerifyCopyPlanData, 'Rollover indirect migration and then migrate'],
-  // [directImagePvPlan, 'Rollover direct migration and then migrate'],
-  // [indirectMultipleProjects, 'Indirect migration of multiple projects'],
-  // [directMultipleProjects, 'Indirect migration of multiple projects'],
-  // [changeTargetNamespace, 'Direct migration of a single project to non-default target namespace'],
-  // [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
-  // [directImagePvPlan, 'Direct image and PV migration'],
-  // [InterclusterState, 'Inter cluster state migration plan'],
-  // [storageClassConversionSource, 'Storage class conversion - Source cluster'],
-  // [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
-  // [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
-  // [storageClassConversionTarget, 'Storage class conversion - Target-Rollover']
+  [directPvPlanData, 'Direct PV migration without copy verification'],
+  [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
+  [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
+  [verifyCopyPlanData, 'Direct migration with copy verification'],
+  [noVerifyCopyPlanData, 'Rollover indirect migration and then migrate'],
+  [directImagePvPlan, 'Rollover direct migration and then migrate'],
+  [indirectMultipleProjects, 'Indirect migration of multiple projects'],
+  [directMultipleProjects, 'Indirect migration of multiple projects'],
+  [changeTargetNamespace, 'Direct migration of a single project to non-default target namespace'],
+  [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
+  [directImagePvPlan, 'Direct image and PV migration'],
+  [InterclusterState, 'Inter cluster state migration plan'],
+  [storageClassConversionSource, 'Storage class conversion - Source cluster'],
+  [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
+  [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
+  [storageClassConversionTarget, 'Storage class conversion - Target-Rollover']
 ];
 
 selectorTuple.forEach(($type) => {
