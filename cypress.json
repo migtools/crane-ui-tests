@@ -2,19 +2,17 @@
   "viewportWidth": 1280,
   "viewportHeight": 800,
   "supportFile": "cypress/support/commands.js",
-  "video": true,
-  "videoCompression": 32,
-  "videoUploadOnPasses": true,
   "env": {
-    "user": "kubeadmin",
-    "password": "J78GY-fNIxT-xNYaC-KqSxc",
-    "craneUrl": "https://migration-openshift-migration.apps.cam-tgt-40990.qe.gcp.devcluster.openshift.com/",
-    "sourceCluster": "https://api.cam-src-40990.qe.gcp.devcluster.openshift.com:6443 -u kubeadmin -p 8Snce-LVct5-r5ctz-8iddM",
-    "targetCluster": "https://api.cam-tgt-40990.qe.gcp.devcluster.openshift.com:6443 -u kubeadmin -p J78GY-fNIxT-xNYaC-KqSxc"
-  },
+        "user": "kubeadmin",
+        "password": "Mgq62-2rUqA-kbmyt-Xw7GX",
+        "craneUrl": "https://migration-openshift-migration.apps.cam-tgt-40940.qe.gcp.devcluster.openshift.com/",
+        "sourceCluster": "https://api.cam-src-40940.qe.gcp.devcluster.openshift.com:6443 -u kubeadmin -p 99ENI-NBRs8-ttsde-JaSiI",
+        "targetCluster": "https://api.cam-tgt-40940.qe.gcp.devcluster.openshift.com:6443 -u kubeadmin -p Mgq62-2rUqA-kbmyt-Xw7GX"
+   },
   "retries": {
-    "runMode": 2,
-    "openMode": 0
-  },
-  "defaultCommandTimeout": 10000
+        "runMode": 2,
+        "openMode": 0
+   },
+  "defaultCommandTimeout": 10000 
+
 }
