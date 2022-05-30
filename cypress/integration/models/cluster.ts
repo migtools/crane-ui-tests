@@ -24,6 +24,7 @@ export class Cluster {
     inputText(instanceToken, token);
     inputText(exposedRegistryPath, registryPath)
     clickByText(addButtonModal, 'Add cluster');
+    cy.get('div.pf-l-flex').contains('Connection successful', { timeout: 10000 })
   }
 
   getAllCLusters(): any {

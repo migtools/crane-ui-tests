@@ -44,8 +44,8 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
     // add new cluster
     it('Add new cluster', () => {
         run_command_oc('source', "sa get-token -n openshift-migration migration-controller").then(($el) => {
-            let url = 'https://proxied-cluster.openvpn-311.svc.cluster.local:8443'
-            let registryPath = 'proxied-cluster.openvpn-311.svc.cluster.local:5000'
+            let url = 'https://proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:8443'
+            let registryPath = 'proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:5000'
             debugger
             let clusterData = {
                 name: 'vpn-tunnel-source',
