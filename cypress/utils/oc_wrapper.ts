@@ -52,10 +52,7 @@ export function run_command_oc(cluster: string, command: string): any {
     else {
         loginToTarget();
     }
-    
-    cy.exec("oc "+ command).then((result)=> {
-        return result.stdout
-    })
 
+    return cy.exec("oc "+ command);
 }
   

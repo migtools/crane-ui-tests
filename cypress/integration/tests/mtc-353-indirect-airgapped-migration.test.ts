@@ -27,7 +27,7 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
         directPvmigration: false,
     }
 
-    before('Setting up the source cluster', () => {
+    before('Prepare cluster', () => {
         cy.exec(`"${craneConfigurationScript}" setup_crane "${sourceCluster}" "${targetCluster}"`, { timeout: 600000 })
             .its('stdout')
             .should('contain', 'SSL Certificate generation complete');
@@ -41,31 +41,30 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
 
     it('Add new cluster', () => {
 
-        let SAToken = run_command_oc('source', "sa get-token -n openshift-migration migration-controller");
-        let url = 'https://proxied-cluster.openvpn-311.svc.cluster.local:8443'
-        let registryPath = 'proxied-cluster.openvpn-311.svc.cluster.local:5000'
-
-        let clusterData = {
-            name: 'vpn-tunnel-source',
-            url: url,
-            token: SAToken,
-            registryPath: registryPath
-        }
-
-        cluster.addCluster(clusterData)
-
+        run_command_oc('source', "sa get-token -n openshift-migration migration-controller").then(($el) => {
+            let url = 'https://proxied-cluster.openvpn-311.svc.cluster.local:8443'
+            let registryPath = 'proxied-cluster.openvpn-311.svc.cluster.local:5000'
+            debugger
+            let clusterData = {
+                name: 'vpn-tunnel-source',
+                url: url,
+                token: $el.stdout,
+                registryPath: registryPath
+            }
+    
+            cluster.addCluster(clusterData)
+        });
     });
-    debugger
 
-    it('create migration plan', () => {
+    it('Create migration plan', () => {
         plan.create(planData);
     });
 
-    it('Executing migration plan', () => {
+    it('Execute migration plan', () => {
         plan.execute(planData);
     });
 
-    after('Validating Migration & Cleaning up', () => {
+    after('Validat Migration & Clean up resources', () => {
         cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 });
         cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 100000 });
         cy.exec(`"${craneConfigurationScript}" clean_crane`);
