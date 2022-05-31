@@ -13,6 +13,10 @@ describe('Automate deletion of multiple migration plans', () => {
       login();
     });
 
+    // trigger the delete then move
+    // change file name 
+    // kepp in a  separate file
+    
     const selectorTuple = [
         [directPvPlanData, 'Direct PV migration with copy verification'],
         [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
