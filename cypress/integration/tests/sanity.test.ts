@@ -49,7 +49,7 @@ selectorTuple.forEach(($type) => {
         cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, { timeout: 200000 });
       }
     });
-    
+
     // login
     it('Login', () => {
       login();
@@ -72,10 +72,13 @@ selectorTuple.forEach(($type) => {
         plan.execute(planData);
       });
     }
+    // delete migplan
+    it('Delete migplan', () => {
+      plan.delete(planData);
+    });
 
     // validate & clean
     after('Validate Migration & clean resources', () => {
-      plan.delete(planData);
 
       if (`${planData.migration_type}` == 'Storage class conversion') {
         cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 });
