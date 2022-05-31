@@ -1,3 +1,4 @@
+import { cloneDeep } from 'cypress/types/lodash';
 import * as loginView from '../integration/views/login.view';
 
 const userName = Cypress.env('user');
@@ -24,7 +25,7 @@ export function login(): void {
       inputText(loginView.userNameInput, userName);
       inputText(loginView.userPasswordInput, userPassword);
       clickByText('button', 'Log in');
-    }   
+    }
   })
 }
 
@@ -44,4 +45,12 @@ export function getTd(columnValue: string, locator: string, tdValue: string): vo
     .within(() => {
       cy.get(locator).contains(tdValue, { timeout: 2000 });
     });
+}
+
+export function log(fileName: string, result: any) {
+  const { code, stdout, stderr } = result
+  if (code != 0) {
+    cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') +'_err.txt', stderr)
+  }
+  cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') +'_output.txt', stdout)
 }
