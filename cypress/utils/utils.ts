@@ -1,9 +1,4 @@
-import { PlanData } from '../integration/types/types';
-import { addNewCluster, clusterName, clusterUrl, exposedRegistryPath, instanceToken } from '../integration/views/cluster.view';
-import { pages } from '../integration/views/enums.view';
 import * as loginView from '../integration/views/login.view';
-import { navMenuPoint } from '../integration/views/menu.view';
-import { editTargetNamepace, planNameInput, saveEdit, searchButton, searchInput, targetNamespace } from '../integration/views/plan.view';
 
 const userName = Cypress.env('user');
 const userPassword = Cypress.env('password');
@@ -85,4 +80,11 @@ export function editTargetNamespace(namespace): void {
 });
 inputText(targetNamespace, namespace+'-new');
 click(saveEdit);
+}
+export function log(fileName: string, result: any) {
+  const { code, stdout, stderr } = result
+  if (code != 0) {
+    cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') +'_err.txt', stderr)
+  }
+  cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') +'_output.txt', stdout)
 }

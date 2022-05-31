@@ -1,5 +1,5 @@
 import { changeTargetNamespace, directImagePlanData, directImagePvPlan, directMultipleProjects, directPvPlanData, IndirectChangeTargetNamespace, indirectMultipleProjects, InterclusterState, noVerifyCopyPlanData, storageClassConversionSource, storageClassConversionTarget, verifyCopydirectPvPlan, verifyCopyPlanData } from './cluster_config';
-import { login } from '../../utils/utils';
+import { login, log } from '../../utils/utils';
 import { Plan } from '../models/plan'
 import { PlanData } from '../types/types';
 
@@ -10,23 +10,23 @@ const configurationScript = "./cypress/utils/configuration_script.sh"
 const plan = new Plan();
 
 const selectorTuple: [PlanData, String][] = [
-  [directImagePlanData, 'Direct image migration without copy verification'],
-  [directPvPlanData, 'Direct PV migration without copy verification'],
-  [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
-  [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
-  [verifyCopyPlanData, 'Direct migration with copy verification'],
-  [noVerifyCopyPlanData, 'Rollover indirect migration and then migrate'],
-  [directImagePvPlan, 'Rollover direct migration and then migrate'],
-  [indirectMultipleProjects, 'Indirect migration of multiple projects'],
-  [directMultipleProjects, 'Indirect migration of multiple projects'],
-  [changeTargetNamespace, 'Direct migration of a single project to non-default target namespace'],
-  [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
+  // [directImagePlanData, 'Direct image migration without copy verification'],
+  // [directPvPlanData, 'Direct PV migration without copy verification'],
+  // [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
+  // [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
+  // [verifyCopyPlanData, 'Direct migration with copy verification'],
+  // [noVerifyCopyPlanData, 'Rollover indirect migration and then migrate'],
+  // [directImagePvPlan, 'Rollover direct migration and then migrate'],
+  // [indirectMultipleProjects, 'Indirect migration of multiple projects'],
+  // [directMultipleProjects, 'Indirect migration of multiple projects'],
+  // [changeTargetNamespace, 'Direct migration of a single project to non-default target namespace'],
+  // [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
   [directImagePvPlan, 'Direct image and PV migration'],
-  [InterclusterState, 'Inter cluster state migration plan'],
-  [storageClassConversionSource, 'Storage class conversion - Source cluster'],
-  [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
-  [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
-  [storageClassConversionTarget, 'Storage class conversion - Target-Rollover']
+  // [InterclusterState, 'Inter cluster state migration plan'],
+  // [storageClassConversionSource, 'Storage class conversion - Source cluster'],
+  // [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
+  // [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
+  // [storageClassConversionTarget, 'Storage class conversion - Target-Rollover']
 ];
 
 selectorTuple.forEach(($type) => {
@@ -42,11 +42,17 @@ selectorTuple.forEach(($type) => {
 
         (`${planData.source}` == 'source-cluster') ? scc_cluster = sourceCluster : scc_cluster = targetCluster
 
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${scc_cluster}`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${scc_cluster}`, { timeout: 200000 }).then((result) => {
+          log(`'${migrationType}_setup_source_cluster'`, result)
+        });
       }
       else {
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 200000 });
-        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 200000 }).then((result) => {
+          log(`'${migrationType}_setup_source_cluster'`, result)
+        });
+        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, { timeout: 200000 }).then((result) => {
+          log(`'${migrationType}_setup_target_cluster'`, result)
+        });
       }
     });
 
@@ -81,11 +87,17 @@ selectorTuple.forEach(($type) => {
     after('Validate Migration & clean resources', () => {
 
       if (`${planData.migration_type}` == 'Storage class conversion') {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 });
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 }).then((result) => {
+          log(`'${migrationType}_post_migration_verification_on_target'`, result)
+        });
       }
       else {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 });
-        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 100000 });
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 }).then((result) => {
+          log(`'${migrationType}_post_migration_verification_on_target'`, result)
+        });
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 100000 }).then((result) => {
+          log(`'${migrationType}_cleanup_source_cluster'`, result)
+        });
       }
     });
   });
