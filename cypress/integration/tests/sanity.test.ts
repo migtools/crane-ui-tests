@@ -9,7 +9,7 @@ const configurationScript = "./cypress/utils/configuration_script.sh"
 
 const plan = new Plan();
 
-const selectorTuple: [PlanData, String][] = [
+const selectorTuple: [PlanData, string][] = [
   // [directImagePlanData, 'Direct image migration without copy verification'],
   // [directPvPlanData, 'Direct PV migration without copy verification'],
   // [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
@@ -78,6 +78,14 @@ selectorTuple.forEach(($type) => {
         plan.execute(planData);
       });
     }
+
+    //check pipeline
+    if (`${migrationType}` == 'Direct image and PV migration') {
+      it('Check Pipeline steps', () => {
+        plan.pipelineStatus(migrationType, planData);
+      });
+    }
+
     // delete migplan
     it('Delete migplan', () => {
       plan.delete(planData);
