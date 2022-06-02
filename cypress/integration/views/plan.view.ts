@@ -9,6 +9,8 @@ export const selectRepo = '#selectedStorage';
 export const searchInput = '#name-input';
 export const searchButton = 'button.pf-c-button.pf-m-control';
 export const editTargetNamepace= 'button.pf-c-button';
+export const saveEdit = 'button[aria-label*=Save]';
+export const targetNamespace = 'input[name="currentTargetNamespaceName"]';
 
 //Plan creation form - copy options page
 export const verifyCopyCheckbox = '.pf-c-check__input';
