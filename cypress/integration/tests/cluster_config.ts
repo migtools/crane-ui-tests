@@ -3,14 +3,14 @@ import { RepoData } from '../types/types';
 
 
 export const clusterData: ClusterData = {
-  name: 'source-cluster-1s',
+  name: 'source-cluster-1s-migplan',
   url: 'https://ec2-3-93-47-241.compute-1.amazonaws.com:8443',
   token: '8443',
 };
 
 export const repoData: RepoData = {
   type: 'AWS S3',
-  name: 'automatic-1',
+  name: 'automatic-1-migplan',
   bucket: 'camreplication',
   region: 'us-east-2',
   key: 'key',
@@ -18,135 +18,135 @@ export const repoData: RepoData = {
 };
 
 export const noVerifyCopyPlanData: PlanData = {
-  name: 'migration-without-verify-copy',
+  name: 'migration-without-verify-copy-migplan',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
   migration_type: 'Full migration',
-  namespaceList: ['nandini'],
+  namespaceList: ['migration-without-verify-copy-namespace'],
   directImageMigration : false,
   directPvmigration : false,
 };
 
 export const verifyCopyPlanData: PlanData = {
-  name: 'migration-with-copy-verify',
+  name: 'migration-with-copy-verify-migplan',
   source: 'source-cluster',
   target: 'host',
   migration_type: 'Full migration',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['migration-with-copy-verify-namespace'],
   verifyCopy : true,
 };
 
 export const directPvPlanData: PlanData = {
-  name: 'direct-pv-migration',
+  name: 'direct-pv-migration-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['direct-pv-migration-namespace'],
   directPvmigration : true,
 }
 
 export const verifyCopydirectPvPlan: PlanData = {
-  name: 'direct-pv-migration-with-copy-verify',
+  name: 'direct-pv-migration-with-copy-verify-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['direct-pv-migration-with-copy-verify-namespace'],
   directPvmigration : true,
   verifyCopy : true,
 }
 
 export const directImagePlanData: PlanData = {
-  name: 'direct-image-migration',
+  name: 'direct-image-migration-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['direct-image-migration-namespace'],
   directImageMigration : true,
 }
 
 export const directImagePvPlan: PlanData = {
-  name: 'direct-image-pv-migration',
+  name: 'direct-image-pv-migration-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['direct-image-pv-migration-namespace'],
   directImageMigration : true,
   directPvmigration : true,
 }
 
 export const indirectMultipleProjects: PlanData = {
-  name: 'indirect-migration-of-multiple-projects',
+  name: 'indirect-migration-of-multiple-projects-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini', 'chandra'],
+  namespaceList: ['indirect-migration-of-multiple-projects-namespace-a', 'indirect-migration-of-multiple-projects-namespace-b'],
   directImageMigration : false,
   directPvmigration : false,
 }
 
 export const directMultipleProjects: PlanData = {
-  name: 'direct-migration-of-multiple-projects',
+  name: 'direct-migration-of-multiple-projects-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini', 'chandra'],
+  namespaceList: ['direct-migration-of-multiple-projects-namespace-a', 'direct-migration-of-multiple-projects-namespace-b'],
   directImageMigration : false,
   directPvmigration : false,
 }
 
 export const changeTargetNamespace: PlanData = {
-  name: 'direct-migration-with-nondefault-target-namespace',
+  name: 'direct-migration-with-nondefault-target-namespace-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['direct-migration-with-nondefault-target-namespace-namespace'],
   directImageMigration : false,
   directPvmigration : false,
   nondefaultTargetNamespace : true,
 };
 
 export const IndirectChangeTargetNamespace: PlanData = {
-  name: 'indirect-migration-with-nondefault-target-namespace',
+  name: 'indirect-migration-with-nondefault-target-namespace-migplan',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['nandini'],
+  namespaceList: ['indirect-migration-with-nondefault-target-namespace-namespace'],
   directImageMigration : false,
   directPvmigration : false,
   nondefaultTargetNamespace : true,
 }
 
 export const storageClassConversionSource: PlanData = {
-  name: 'scc-source',
+  name: 'scc-source-migplan',
   migration_type: 'Storage class conversion',
   source: 'source-cluster',
   repo: 'automatic',
-  namespaceList: ['test-scc']
+  namespaceList: ['scc-source-namespace']
 }
 
 export const storageClassConversionTarget: PlanData = {
-  name: 'scc-target',
+  name: 'scc-target-migplan',
   migration_type: 'Storage class conversion',
   source: 'host',
   repo: 'automatic',
-  namespaceList: ['test-scc']
+  namespaceList: ['scc-target-namespace']
 }
 
 export const InterclusterState: PlanData = {
-  name: 'inter-state-plan',
+  name: 'inter-state-plan-migplan',
   migration_type: 'State migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['ocp-attached-pvc']
+  namespaceList: ['inter-state-plan-namespace']
 }
