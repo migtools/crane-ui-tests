@@ -8,10 +8,12 @@ const targetCluster = Cypress.env('targetCluster')
 
 export function loginToSource(): void {
     cy.exec('oc login ' + sourceCluster + ' --insecure-skip-tls-verify');
+    cy.wait(2000)
 }
   
 export function loginToTarget(): void {
     cy.exec('oc login ' + targetCluster + ' --insecure-skip-tls-verify');
+    cy.wait(2000)
 }
 
 export function createProject(namespace: string): void {
