@@ -36,8 +36,11 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
         cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} "${targetCluster}"`, { timeout: 200000 });
     });
 
+
+
     // login
     it('Login', () => {
+        cy.wait(600000)
         login()
     });
 
@@ -53,7 +56,6 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
                 token: $el.stdout,
                 registryPath: registryPath
             }
-    
             cluster.addCluster(clusterData)
         });
     });
