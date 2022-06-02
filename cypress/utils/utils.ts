@@ -1,4 +1,5 @@
 import * as loginView from '../integration/views/login.view';
+import { editTargetNamepace, searchButton, searchInput } from '../integration/views/plan.view';
 
 const userName = Cypress.env('user');
 const userPassword = Cypress.env('password');
@@ -84,7 +85,30 @@ click(saveEdit);
 export function log(fileName: string, result: any) {
   const { code, stdout, stderr } = result
   if (code != 0) {
-    cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') +'_err.txt', stderr)
+    cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_err.txt', stderr)
   }
-  cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') +'_output.txt', stdout)
+  cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_output.txt', stdout)
+}
+
+export function searchAndSelectNamespace(name) {
+
+  inputText(searchInput, name);
+  cy.get(searchButton).first().click();
+  cy.get('td')
+    .contains(name)
+    .parent('tr')
+    .within(() => {
+      click('input');
+    });
+}
+
+export function editTargetNamespace(name) {
+  cy.get('td')
+    .contains(name)
+    .parent('tr')
+    .within(() => {
+      click(editTargetNamepace);
+    });
+  inputText(targetNamespace, 'non-default');
+  click(saveEdit);
 }
