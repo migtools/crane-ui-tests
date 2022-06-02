@@ -27,7 +27,7 @@ export function login(): void {
       inputText(loginView.userNameInput, userName);
       inputText(loginView.userPasswordInput, userPassword);
       clickByText('button', 'Log in');
-    }   
+    }
   })
 }
 
@@ -54,14 +54,14 @@ export function getTd(columnValue: string, locator: string, tdValue: string): vo
 }
 
 export function searchAndSelectNamespace(namespace: string): void {
-    inputText(searchInput, namespace);
-    cy.get(searchButton).first().click();
-    cy.get('td')
-      .contains(namespace)
-      .parent('tr')
-      .within(() => {
-        click('input');
-      })
+  inputText(searchInput, namespace);
+  cy.get(searchButton).first().click();
+  cy.get('td')
+    .contains(namespace)
+    .parent('tr')
+    .within(() => {
+      click('input');
+    })
 }
 
 export function navigateToPage(pageName: pages): void {
@@ -80,13 +80,13 @@ export function fillGeneralFields(name, source, target, repo, migration_type): v
 
 export function editTargetNamespace(namespace): void {
   cy.get('td')
-  .contains(namespace)
-  .parent('tr')
-  .within(() => {
-    click(editTargetNamepace);
-});
-inputText(targetNamespace, namespace+'-new');
-click(saveEdit);
+    .contains(namespace)
+    .parent('tr')
+    .within(() => {
+      click(editTargetNamepace);
+    });
+  inputText(targetNamespace, namespace + '-new');
+  click(saveEdit);
 }
 
 
