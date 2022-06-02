@@ -128,3 +128,11 @@ inputText(targetNamespace, namespace+'-new');
 click(saveEdit);
 }
 
+
+export function log(fileName: string, result: any) {
+  const { code, stdout, stderr } = result
+  if (code != 0) {
+    cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_err.txt', stderr)
+  }
+  cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_output.txt', stdout)
+}
