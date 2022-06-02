@@ -29,3 +29,6 @@ export enum dataLabel {
   vms = '[data-label=VMs]',
   status = '[data-label="Last state"]',
 }
+
+export const saveEdit = 'button[aria-label*=Save]';
+export const targetNamespace = 'input[name="currentTargetNamespaceName"]';
