@@ -35,6 +35,10 @@ export function next(): void {
   clickByText('button', 'Next');
 }
 
+export function back(): void {
+  clickByText('button', 'Back');
+}
+
 export function selectFromDroplist(selector: string, selectionMade: string): void {
   clickByText('button', selector);
   clickByText('button', selectionMade);
