@@ -74,8 +74,8 @@ export function fillGeneralFields(name, source, target, repo, migration_type): v
   selectFromDroplist('Select source', source);
   if (migration_type == 'Full migration' || migration_type == 'State migration') {
     selectFromDroplist('Select target', target);
+    selectFromDroplist('Select repository', repo);
   }
-  selectFromDroplist('Select repository', repo);
 }
 
 export function editTargetNamespace(namespace): void {
