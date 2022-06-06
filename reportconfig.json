@@ -1,7 +1,6 @@
 {
     "viewportWidth": 1280,
     "viewportHeight": 880,
-    "video": false,
     "env": {
         "user": "kubeadmin",
         "pass": "best-password-ever",

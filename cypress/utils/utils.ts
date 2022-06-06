@@ -35,6 +35,10 @@ export function next(): void {
   clickByText('button', 'Next');
 }
 
+export function back(): void {
+  clickByText('button', 'Back');
+}
+
 export function selectFromDroplist(selector: string, selectionMade: string): void {
   clickByText('button', selector);
   clickByText('button', selectionMade);
@@ -83,49 +87,6 @@ export function editTargetNamespace(namespace): void {
     });
   inputText(targetNamespace, namespace + '-new');
   click(saveEdit);
-}
-export function log(fileName: string, result: any) {
-  const { code, stdout, stderr } = result
-  if (code != 0) {
-    cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_err.txt', stderr)
-  }
-  cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_output.txt', stdout)
-}
-
-export function searchAndSelectNamespace(namespace: string): void {
-    inputText(searchInput, namespace);
-    cy.get(searchButton).first().click();
-    cy.get('td')
-      .contains(namespace)
-      .parent('tr')
-      .within(() => {
-        click('input');
-      })
-}
-
-export function navigateToPage(pageName: pages): void {
-  clickByText(navMenuPoint, pageName);
-}
-
-export function fillGeneralFields(name, source, target, repo, migration_type): void {
-  inputText(planNameInput, name);
-  selectFromDroplist('Select', migration_type)
-  selectFromDroplist('Select source', source);
-  if (migration_type == 'Full migration' || migration_type == 'State migration') {
-    selectFromDroplist('Select target', target);
-  }
-  selectFromDroplist('Select repository', repo);
-}
-
-export function editTargetNamespace(namespace): void {
-  cy.get('td')
-  .contains(namespace)
-  .parent('tr')
-  .within(() => {
-    click(editTargetNamepace);
-});
-inputText(targetNamespace, namespace+'-new');
-click(saveEdit);
 }
 
 

@@ -11,13 +11,13 @@ export class Plan {
     clickByText(navMenuPoint, 'Migration plans');
   }
   
-  protected generalStep(planData: PlanData): void {
+  generalStep(planData: PlanData): void {
     const { name, source, target, repo, migration_type } = planData;
     fillGeneralFields(name, source, target, repo, migration_type)
     next();
   }
 
-  protected selectNamespace(planData: PlanData): void {
+  selectNamespace(planData: PlanData): void {
     const { namespaceList, nondefaultTargetNamespace } = planData;
     namespaceList.forEach((name) => {
 
@@ -48,13 +48,13 @@ export class Plan {
     next();
   }
 
-  protected persistentVolumes(): void {
+  persistentVolumes(): void {
     //Wait for PVs to be listed and the 'Next' button to be enabled
     cy.contains('button', 'Next', { timeout: 200000 }).should('be.enabled');
     next();
   }
 
-  protected copyOptions(planData: PlanData): void {
+  copyOptions(planData: PlanData): void {
     const { verifyCopy } = planData;
     if (verifyCopy) {
       cy.get(verifyCopyCheckbox, { timeout: 20000 }).should('be.enabled').check();
@@ -64,7 +64,7 @@ export class Plan {
     next();
   }
 
-  protected migrationOptions(planData: PlanData): void {
+  migrationOptions(planData: PlanData): void {
     const { directPvmigration, directImageMigration } = planData;
     if (directPvmigration)
       cy.get(directPvMigrationCheckbox, { timeout: 20000 }).should('be.enabled').check();
@@ -83,7 +83,7 @@ export class Plan {
       next();
   }
 
-  protected hooks(): void {
+  hooks(): void {
     clickByText('button', 'Next');
   }
 
@@ -112,7 +112,7 @@ export class Plan {
       });
   }
 
-  protected waitForReady(name: string): void {
+  waitForReady(name: string): void {
     cy.get('th')
       .contains(name)
       .closest('tr')
@@ -167,13 +167,19 @@ export class Plan {
       this.hooks();
     }
 
-    //Assert that plan is successfully validated before being run
-    cy.get('span#condition-message').should('contain', 'The migration plan is ready', { timeout : 10000 });
-    cy.wait(500).findByText("Close").click();
+    // close the migplan creation wizard
+    this.closeWizard()
 
     //Wait for plan to be in 'Ready' state
     this.waitForReady(name);
   }
+
+  closeWizard() {
+    //Assert that plan is successfully validated before being run
+    cy.get('span#condition-message').should('contain', 'The migration plan is ready', { timeout : 10000 });
+    cy.wait(500).findByText("Close").click();
+  }
+
   execute(planData: PlanData): void {
     const { name, migration_type } = planData;
     Plan.openList();
