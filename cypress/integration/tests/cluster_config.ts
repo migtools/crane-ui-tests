@@ -3,14 +3,14 @@ import { RepoData } from '../types/types';
 
 
 export const clusterData: ClusterData = {
-  name: 'source-cluster-1s-migplan',
+  name: 'source-cluster-1s',
   url: 'https://ec2-3-93-47-241.compute-1.amazonaws.com:8443',
   token: '8443',
 };
 
 export const repoData: RepoData = {
   type: 'AWS S3',
-  name: 'automatic-1-migplan',
+  name: 'automatic-1',
   bucket: 'camreplication',
   region: 'us-east-2',
   key: 'key',
@@ -18,7 +18,7 @@ export const repoData: RepoData = {
 };
 
 export const noVerifyCopyPlanData: PlanData = {
-  name: 'migration-without-verify-copy-migplan',
+  name: 'migration-without-verify-copy',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
@@ -29,7 +29,7 @@ export const noVerifyCopyPlanData: PlanData = {
 };
 
 export const verifyCopyPlanData: PlanData = {
-  name: 'migration-with-copy-verify-migplan',
+  name: 'migration-with-copy-verify',
   source: 'source-cluster',
   target: 'host',
   migration_type: 'Full migration',
@@ -39,7 +39,7 @@ export const verifyCopyPlanData: PlanData = {
 };
 
 export const directPvPlanData: PlanData = {
-  name: 'direct-pv-migration-migplan',
+  name: 'direct-pv-migration',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -49,7 +49,7 @@ export const directPvPlanData: PlanData = {
 }
 
 export const verifyCopydirectPvPlan: PlanData = {
-  name: 'direct-pv-migration-with-copy-verify-migplan',
+  name: 'direct-pv-migration-with-copy-verify',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -60,7 +60,7 @@ export const verifyCopydirectPvPlan: PlanData = {
 }
 
 export const directImagePlanData: PlanData = {
-  name: 'direct-image-migration-migplan',
+  name: 'direct-image-migration',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -70,7 +70,7 @@ export const directImagePlanData: PlanData = {
 }
 
 export const directImagePvPlan: PlanData = {
-  name: 'direct-image-pv-migration-migplan',
+  name: 'direct-image-pv-migration',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -81,7 +81,7 @@ export const directImagePvPlan: PlanData = {
 }
 
 export const indirectMultipleProjects: PlanData = {
-  name: 'indirect-migration-of-multiple-projects-migplan',
+  name: 'indirect-migration-of-multiple-projects',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -92,7 +92,7 @@ export const indirectMultipleProjects: PlanData = {
 }
 
 export const directMultipleProjects: PlanData = {
-  name: 'direct-migration-of-multiple-projects-migplan',
+  name: 'direct-migration-of-multiple-projects',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -103,7 +103,7 @@ export const directMultipleProjects: PlanData = {
 }
 
 export const changeTargetNamespace: PlanData = {
-  name: 'direct-migration-with-nondefault-target-namespace-migplan',
+  name: 'direct-migration-with-nondefault-target-namespace',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -115,7 +115,7 @@ export const changeTargetNamespace: PlanData = {
 };
 
 export const IndirectChangeTargetNamespace: PlanData = {
-  name: 'indirect-migration-with-nondefault-target-namespace-migplan',
+  name: 'indirect-migration-with-nondefault-target-namespace',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
@@ -127,7 +127,7 @@ export const IndirectChangeTargetNamespace: PlanData = {
 }
 
 export const storageClassConversionSource: PlanData = {
-  name: 'scc-source-migplan',
+  name: 'scc-source',
   migration_type: 'Storage class conversion',
   source: 'source-cluster',
   repo: 'automatic',
@@ -135,7 +135,7 @@ export const storageClassConversionSource: PlanData = {
 }
 
 export const storageClassConversionTarget: PlanData = {
-  name: 'scc-target-migplan',
+  name: 'scc-target',
   migration_type: 'Storage class conversion',
   source: 'host',
   repo: 'automatic',
@@ -143,7 +143,7 @@ export const storageClassConversionTarget: PlanData = {
 }
 
 export const InterclusterState: PlanData = {
-  name: 'inter-state-plan-migplan',
+  name: 'inter-state-plan',
   migration_type: 'State migration',
   source: 'source-cluster',
   target: 'host',
