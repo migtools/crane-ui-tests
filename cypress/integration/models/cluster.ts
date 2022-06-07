@@ -2,7 +2,7 @@
 import { click, clickByText, inputText } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import { ClusterData } from '../types/types';
-import { clusterName, clusterUrl, instanceToken, addButtonModal, exposedRegistryPath, addNewCluster } from '../views/cluster.view';
+import { clusterName, clusterUrl, instanceToken, addButtonModal, exposedRegistryPath, addNewCluster, closeWizard } from '../views/cluster.view';
 
 export class Cluster {
   protected static openLi(): void {
@@ -17,14 +17,20 @@ export class Cluster {
   }
 
   addCluster(clusterData: ClusterData): void {
-    const { name, url, token, registryPath } = clusterData;
+    const { name, url, token, registry_path } = clusterData;
     click(addNewCluster);
     inputText(clusterName, name);
     inputText(clusterUrl, url);
     inputText(instanceToken, token);
-    inputText(exposedRegistryPath, registryPath)
+    if ( registry_path != null){
+        inputText(exposedRegistryPath, registry_path)
+    }
     clickByText(addButtonModal, 'Add cluster');
     cy.get('div.pf-l-flex').contains('Connection successful', { timeout: 10000 })
+  }
+
+  close() {
+    clickByText(closeWizard, 'Close');
   }
 
   getAllCLusters(): any {

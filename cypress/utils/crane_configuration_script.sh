@@ -1,5 +1,6 @@
 SRC_CLUSTER=$2
 TGT_CLUSTER=$3
+PROXY_STR = $4
 
 setup_crane() {
 
@@ -20,7 +21,7 @@ setup_crane() {
     # cp *-crane-* crane
     chmod +x ./crane
 
-    source_context=$(oc config current-context)
+    SOURCE_CONTEXT=$(oc config current-context)
 
     oc login ${TGT_CLUSTER} --insecure-skip-tls-verify
 
@@ -29,9 +30,20 @@ setup_crane() {
         sleep 30
     fi
 
-    destination_context=$(oc config current-context)
-    
-    ./crane tunnel-api --namespace openvpn-tunnel-namespace --destination-context ${destination_context} --source-context ${source_context}
+    DESTINATION_CONTEXT=$(oc config current-context)
+
+    if (( $PROXY_STR == '' ))
+      ./crane tunnel-api --namespace openvpn-tunnel-namespace --destination-context ${DESTINATION_CONTEXT} --source-context ${SOURCE_CONTEXT}
+    else
+
+      PROXY_USER = "$(cut -d':' -f2 <<<"$PROXY_STR" | cut -d'/' -f3)"
+      PROXY_PASS = "$(cut -d'@' -f1 <<<"$PROXY_STR" | cut -d':' -f3)"
+      PROXY_HOST = "$(cut -d'@' -f2 <<<"$PROXY_STR" | cut -d':' -f1)"
+      PROXY_PORT = "$(cut -d'@' -f2 <<<"$PROXY_STR" | cut -d':' -f2)"
+
+      ./crane tunnel-api --namespace openvpn-tunnel-namespace --destination-context ${DESTINATION_CONTEXT} --source-context ${SOURCE_CONTEXT} --proxy-host ${PROXY_HOST} --proxy-port ${PROXY_PORT} --proxy-user ${PROXY_USER} --proxy-pass ${PROXY_PASS}
+    fi
+
 }
 
 clean_crane() {
