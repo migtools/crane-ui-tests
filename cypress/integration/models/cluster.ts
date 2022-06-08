@@ -1,8 +1,8 @@
 //import { addCluster, button } from '../types/constants';
-import { clickByText, inputText, openSidebarMenu } from '../../utils/utils';
+import { click, clickByText, inputText } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import { ClusterData } from '../types/types';
-import { clusterName, clusterUrl, instanceToken, addButtonModal } from '../views/cluster.view';
+import { clusterName, clusterUrl, instanceToken, addButtonModal, exposedRegistryPath, addNewCluster, closeWizard } from '../views/cluster.view';
 
 export class Cluster {
   protected static openLi(): void {
@@ -16,18 +16,33 @@ export class Cluster {
     Cluster.openLi();
   }
 
-  protected runWizard(clusterData: ClusterData): void {
-    const { name, url, token } = clusterData;
-    clickByText('button', 'Add cluster');
+  addCluster(clusterData: ClusterData): void {
+    const { name, url, token, registryPath } = clusterData;
+    click(addNewCluster);
     inputText(clusterName, name);
     inputText(clusterUrl, url);
     inputText(instanceToken, token);
+    if ( registryPath != null){
+        inputText(exposedRegistryPath, registryPath)
+    }
     clickByText(addButtonModal, 'Add cluster');
+    cy.get('div.pf-l-flex').contains('Connection successful', { timeout: 10000 })
   }
 
-  create(clusterData: ClusterData): void {
-    this.openMenu();
-    this.runWizard(clusterData);
-    //this.populate(providerData);
+  close() {
+    clickByText(closeWizard, 'Close');
+  }
+
+  getAllCLusters(): any {
+    cy.get('td[data-label=Name]')
+      .then(($els) => {
+        // we get a list of jQuery elements
+        // let's convert the jQuery object into a plain array
+        return (
+          Cypress.$.makeArray($els)
+            // and extract inner text from each
+            .map((el) => el.innerText)
+        )
+      });
   }
 }

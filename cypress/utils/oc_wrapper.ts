@@ -7,11 +7,13 @@ const targetCluster = Cypress.env('targetCluster')
 //Backend Utils
 
 export function loginToSource(): void {
+    cy.log("Logging in to source cluster: " + sourceCluster)
     cy.exec('oc login ' + sourceCluster + ' --insecure-skip-tls-verify');
     cy.wait(2000)
 }
   
 export function loginToTarget(): void {
+    cy.log("Logging in to target cluster: " + targetCluster)
     cy.exec('oc login ' + targetCluster + ' --insecure-skip-tls-verify');
     cy.wait(2000)
 }
@@ -52,6 +54,5 @@ export function run_command_oc(cluster: string, command: string): any {
     }
 
     return cy.exec("oc "+ command);
-
 }
   

@@ -8,7 +8,7 @@ const userPassword = Cypress.env('password');
 const craneUiUrl = Cypress.env('craneUrl');
 
 export function inputText(fieldId: string, text: string): void {
-  cy.get(fieldId).clear().type(text);
+  cy.get(fieldId).clear().type(text, {timeout: 20000});
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
