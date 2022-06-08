@@ -17,13 +17,13 @@ export class Cluster {
   }
 
   addCluster(clusterData: ClusterData): void {
-    const { name, url, token, registry_path } = clusterData;
+    const { name, url, token, registryPath } = clusterData;
     click(addNewCluster);
     inputText(clusterName, name);
     inputText(clusterUrl, url);
     inputText(instanceToken, token);
-    if ( registry_path != null){
-        inputText(exposedRegistryPath, registry_path)
+    if ( registryPath != null){
+        inputText(exposedRegistryPath, registryPath)
     }
     clickByText(addButtonModal, 'Add cluster');
     cy.get('div.pf-l-flex').contains('Connection successful', { timeout: 10000 })
