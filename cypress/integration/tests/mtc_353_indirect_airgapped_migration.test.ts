@@ -36,23 +36,19 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
 
             ($el.stdout == '') ? proxy_str = '' : proxy_str = $el.stdout.split(": ")[1].trim()
 
-            cy.exec(`"${craneConfigurationScript}" setup_crane "${sourceCluster}" "${targetCluster}" "${proxy_str}"`, { timeout: 600000 })
-                .then((result) => {
-                    console.log(result.stderr)
-                    debugger
-                })
+            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`, { timeout: 1800000 })
                 .its('stdout')
                 .should('contain', 'SSL Certificate generation complete');
         });
 
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 200000 });
-        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} "${targetCluster}"`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 200000 });
+        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, { timeout: 200000 });
     });
 
     // login
     it('Login', () => {
-        cy.wait(600000)
-        login()
+        login();
+        cy.wait(600000);
     });
 
     // add new cluster
@@ -82,9 +78,9 @@ describe('mtc-353-indirect-air-gapped-migration', () => {
     });
 
     // validate & clean
-    after('Validat Migration & Clean up resources', () => {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 });
-        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 100000 });
-//         cy.exec(`"${craneConfigurationScript}" clean_crane "${sourceCluster}" "${targetCluster}"`);
+    after('Validate Migration & Clean up resources', () => {
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 });
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 100000 });
+        cy.exec(`"${craneConfigurationScript}" clean_crane ${sourceCluster} ${targetCluster}`, {timeout: 1800000});
     });
 });

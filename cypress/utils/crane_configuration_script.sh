@@ -68,8 +68,8 @@ clean_crane() {
   fi
 }
 
-if [ $1 == "setup_crane" ]; then
+if [[ $1 == "setup_crane" ]]; then
   setup_crane SRC_CLUSTER TGT_CLUSTER PROXY_STR
-elif [ $1 == "clean_crane" ]; then
-  clean_crane SRC_CLUSTER TGT_CLUSTER
+elif [[ $1 == "clean_crane" ]]; then
+  clean_crane
 fi
