@@ -70,7 +70,7 @@ export function navigateToPage(pageName: pages): void {
 
 export function fillGeneralFields(name, source, target, repo, migration_type): void {
   inputText(planNameInput, name);
-  selectFromDroplist('Select', migration_type)
+  selectFromDroplist('Select...', migration_type)
   selectFromDroplist('Select source', source);
   if (migration_type == 'Full migration' || migration_type == 'State migration') {
     selectFromDroplist('Select target', target);
