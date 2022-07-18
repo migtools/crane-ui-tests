@@ -9,6 +9,12 @@ const targetCluster = Cypress.env('targetCluster');
 const configurationScript = "./cypress/utils/configuration_script.sh"
 
 describe('Automate deletion of multiple migration plans', () => {
+
+    // check if the migplan is deleted
+    it('Assert all migplans are deleted', () => {
+        run_command_oc('source', ' -n openshift-migration get migplan | wc -l').its('stdout').should('eq', '0')
+    });
+
     const plan = new Plan();
 
     const selectorTuple: [PlanData, string][] = [
