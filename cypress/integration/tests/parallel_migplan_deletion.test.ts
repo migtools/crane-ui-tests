@@ -29,6 +29,10 @@ describe('Automate deletion of multiple migration plans', () => {
             cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, {timeout: 200000});
             cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} "${targetCluster}"`, {timeout: 200000});
         });
+    });
+
+    selectorTuple.forEach(($type) => {
+        const [planData, migrationType] = $type;
         // create migration plans
         it(`Create migplan_${migrationType}`, () => {
             plan.create(planData);
