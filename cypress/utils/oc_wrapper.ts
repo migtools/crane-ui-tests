@@ -8,13 +8,13 @@ const targetCluster = Cypress.env('targetCluster')
 
 export function loginToSource(): void {
     cy.log("Logging in to source cluster: " + sourceCluster)
-    cy.exec(`oc login ${sourceCluster.replace(/^"(.*)"$/, '$1')}`);
+    cy.exec(`oc login ${sourceCluster}`.replace("\"",""));
     cy.wait(2000)
 }
   
 export function loginToTarget(): void {
     cy.log("Logging in to target cluster: " + targetCluster)
-    cy.exec(`oc login ${sourceCluster.replace(/^"(.*)"$/, '$1')}`);
+    cy.exec(`oc login ${sourceCluster}`.replace("\"",""));
     cy.wait(2000)
 }
 
