@@ -8,13 +8,13 @@ const targetCluster = Cypress.env('targetCluster')
 
 export function loginToSource(): void {
     cy.log("Logging in to source cluster: " + sourceCluster)
-    cy.exec(`oc login ${sourceCluster} --insecure-skip-tls-verify`);
+    cy.exec(`oc login ${decodeURI(sourceCluster)} --insecure-skip-tls-verify`);
     cy.wait(2000)
 }
   
 export function loginToTarget(): void {
     cy.log("Logging in to target cluster: " + targetCluster)
-    cy.exec('oc login ' + targetCluster + ' --insecure-skip-tls-verify');
+    cy.exec(`oc login ${decodeURI(sourceCluster)} --insecure-skip-tls-verify`);
     cy.wait(2000)
 }
 
