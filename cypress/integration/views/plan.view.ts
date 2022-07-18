@@ -7,7 +7,7 @@ export const selectRepo = '#selectedStorage';
 
 //Plan creation form - Namespaces page
 export const searchInput = '#name-input';
-export const searchButton = 'button.pf-c-button.pf-m-control';
+export const searchButton = '//div[@class="pf-c-wizard"]//div[@id="pv-table-filter-toolbar"]//div[@class="pf-c-input-group"]//button[contains(@class,\'pf-c-button\')]';
 export const editTargetNamepace= 'button.pf-c-button';
 export const saveEdit = 'button[aria-label*=Save]';
 export const targetNamespace = 'input[name="currentTargetNamespaceName"]';
