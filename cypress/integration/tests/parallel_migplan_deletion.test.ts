@@ -54,7 +54,7 @@ describe('Automate deletion of multiple migration plans', () => {
 
     // check if the migplan is deleted
     it('Assert all migplans are deleted', () => {
-        run_command_oc('target', ' -n openshift-migration get migplan | wc -l').its('stdout').should('eq', '0')
+        run_command_oc('source', ' -n openshift-migration get migplan | wc -l').its('stdout').should('eq', '0')
     });
 
     // clean the resources
