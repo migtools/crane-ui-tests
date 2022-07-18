@@ -26,8 +26,8 @@ describe('Automate deletion of multiple migration plans', () => {
         const [planData, migrationType] = $type;
         // setup source cluster
         it(`setup source cluster_${migrationType}`, () => {
-            cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, {timeout: 200000});
-            cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} "${targetCluster}"`, {timeout: 200000});
+            cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000});
+            cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, {timeout: 200000});
         });
     });
 
@@ -62,7 +62,7 @@ describe('Automate deletion of multiple migration plans', () => {
         const [planData, migrationType] = $type;
         // clean migplans
         it(`${migrationType}`, () => {
-            cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, {timeout: 100000});
+            cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000});
         });
     });
 });
