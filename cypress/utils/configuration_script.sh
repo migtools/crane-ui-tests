@@ -4,7 +4,7 @@ CLUSTER=$3
 
 setup_source_cluster() {
     #This function creates a new project and application for migration on source cluster.
-    oc login $CLUSTER --insecure-skip-tls-verify
+    $CLUSTER --insecure-skip-tls-verify
     for i in $NAMESPACE_LIST; do
         if (oc get project $i 2>/dev/null); then
             oc delete project $i
@@ -21,7 +21,7 @@ setup_source_cluster() {
 
 setup_target_cluster() {
     #This function deletes any existing plan(s) and target namespace on the target cluster.
-    oc login $CLUSTER --insecure-skip-tls-verify
+    $CLUSTER --insecure-skip-tls-verify
     for i in $NAMESPACE_LIST; do
         if (oc get project $i 2>/dev/null); then
             oc delete project $i
@@ -32,7 +32,7 @@ setup_target_cluster() {
 
 cleanup_source_cluster() {
     #This function cleans up the source cluster by deleting the application created for migration.
-    oc login $CLUSTER --insecure-skip-tls-verify
+    $CLUSTER --insecure-skip-tls-verify
     for i in $NAMESPACE_LIST; do
         if (oc get project $i 2>/dev/null); then
             oc delete project $i
@@ -42,7 +42,7 @@ cleanup_source_cluster() {
 
 post_migration_verification_on_target() {
     #This function verifies that the migrated application is running fine on the target cluster.
-    oc login $CLUSTER --insecure-skip-tls-verify
+    $CLUSTER --insecure-skip-tls-verify
     for i in $NAMESPACE_LIST; do
         if (oc get routes -n $i | grep django 2>/dev/null); then
             curl $(oc get routes -n i | grep django| awk '{print $2}')

@@ -5,7 +5,7 @@ NAMESPACE="openvpn-tunnel-namespace"
 
 setup_crane() {
 
-  oc login ${SRC_CLUSTER} --insecure-skip-tls-verify
+  ${SRC_CLUSTER} --insecure-skip-tls-verify
 
   if (oc get project ${NAMESPACE} 2>/dev/null); then
     oc delete project ${NAMESPACE}
@@ -16,7 +16,7 @@ setup_crane() {
 
   SOURCE_CONTEXT=$(oc config current-context)
 
-  oc login ${TGT_CLUSTER} --insecure-skip-tls-verify
+  ${TGT_CLUSTER} --insecure-skip-tls-verify
 
   if (oc get project ${NAMESPACE} 2>/dev/null); then
     oc delete project ${NAMESPACE}
@@ -49,7 +49,7 @@ setup_crane() {
 
 clean_crane() {
 
-  oc login ${SRC_CLUSTER} --insecure-skip-tls-verify
+  ${SRC_CLUSTER} --insecure-skip-tls-verify
 
   if (oc get project ${NAMESPACE} 2>/dev/null); then
     oc delete project ${NAMESPACE}
@@ -58,7 +58,7 @@ clean_crane() {
     done
   fi
 
-  oc login ${TGT_CLUSTER} --insecure-skip-tls-verify
+  ${TGT_CLUSTER} --insecure-skip-tls-verify
 
   if (oc get project ${NAMESPACE} 2>/dev/null); then
     oc delete project ${NAMESPACE}
