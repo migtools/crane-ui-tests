@@ -1,0 +1,86 @@
+import {PlanData} from "../types/types";
+import {login, next} from "../../utils/utils";
+import {Plan} from "../models/plan";
+import {run_command_oc} from "../../utils/oc_wrapper";
+
+const sourceCluster = Cypress.env('sourceCluster');
+const targetCluster = Cypress.env('targetCluster');
+const configurationScript = "./cypress/utils/configuration_script.sh"
+
+describe('mtc_83_storage_class_options', () => {
+
+    const plan = new Plan();
+
+    const planData: PlanData = {
+        name: 'mtc-83-storage-class-options-migplan',
+        source: 'source-cluster',
+        target: 'host',
+        repo: 'automatic',
+        migration_type: 'Full migration',
+        namespaceList: ['mtc-83-storage-class-options'],
+        directImageMigration: true,
+        directPvmigration: true,
+        verifyCopy: true
+    };
+
+    // setup source cluster
+    before('Setup clusters', () => {
+        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" "${sourceCluster}"`, {timeout: 200000});
+        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" "${targetCluster}"`, {timeout: 200000});
+    });
+
+    // login
+    it('login', () => {
+        login();
+    })
+
+    // create migplan
+    it('create migplan', () => {
+        plan.create(planData);
+    });
+    // execute migplan
+    it('execute migplan', () => {
+        plan.execute(planData);
+    });
+
+    // validate & cleanup target cluster
+    after('Validate Migration', () => {
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target "${planData.namespaceList}" "${targetCluster}"`, {timeout: 100000});
+    });
+
+    // Verify that pvc is using default storageclass
+    it('Verify that pvc is using default storageclass', () => {
+        run_command_oc('target', `get pvc -n ${planData.namespaceList[0]} -o yaml`).its('stdout').should('contain', 'storageClassName: standard')
+    })
+
+    // rollback migplan
+    it('rollback migplan', () => {
+        plan.rollback(planData);
+    });
+
+    //Edit migplan & change storage class to None
+    it('Edit migplan & change storage class to None', () => {
+        plan.editMigplan(planData.name);
+        next();
+        next();
+        next();
+        plan.selectStorageClass('None')
+        next();
+        next();
+        next();
+        // close the migplan creation wizard
+        plan.closeWizard()
+        //Wait for plan to be in 'Ready' state
+        plan.waitForReady(planData.name);
+    });
+
+    it('', () => {
+       run_command_oc('target', ` get migplan ${planData.name} -n openshift-migration -o yaml`).its('stdout').should('contain', 'type: PvNoStorageClassSelection');
+    });
+
+
+    // validate & cleanup target cluster
+    after('Clean resources', () => {
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000});
+    });
+});
