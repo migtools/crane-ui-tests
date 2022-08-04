@@ -1,4 +1,4 @@
-import { changeTargetNamespace, directImagePlanData, directImagePvPlan, directMultipleProjects, directPvPlanData, IndirectChangeTargetNamespace, indirectMultipleProjects, InterclusterState, noVerifyCopyPlanData, storageClassConversionSource, storageClassConversionTarget, verifyCopydirectPvPlan, verifyCopyPlanData } from './cluster_config';
+import { changeTargetNamespace, directImagePlanData, directImagePvPlan, directMultipleProjects, directPvPlanData, IndirectChangeTargetNamespace, indirectMultipleProjects, InterclusterState, noVerifyCopyPlanData, storageClassConversionSource, storageClassConversionTarget, verifyCopydirectPvPlan, verifyCopyPlanData, IntraClusterStateSource, IntraClusterStateTarget } from './cluster_config';
 import { login, log } from '../../utils/utils';
 import { Plan } from '../models/plan'
 import { PlanData } from '../types/types';
@@ -26,7 +26,9 @@ const selectorTuple: [PlanData, string][] = [
   [storageClassConversionSource, 'Storage class conversion - Source cluster'],
   [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
   [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
-  [storageClassConversionTarget, 'Storage class conversion - Target-Rollover']
+  [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
+  [IntraClusterStateSource, 'Intra cluster state migration - Source cluster'],
+  [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
 ];
 
 selectorTuple.forEach(($type) => {
