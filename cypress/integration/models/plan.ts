@@ -1,19 +1,13 @@
 import { PlanData } from '../types/types';
-import { clickByText, click, inputText, next, selectFromDroplist, getTd, fillGeneralFields, searchAndSelectNamespace, editTargetNamespace } from '../../utils/utils';
+import { clickByText, click, next,getTd, fillGeneralFields, searchAndSelectNamespace, editTargetNamespace } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import {
-  planNameInput,
-  searchInput,
-  searchButton,
   directPvMigrationCheckbox,
   verifyCopyCheckbox,
   directImageMigrationCheckbox,
   dataLabel,
   kebab,
   kebabDropDownItem,
-  editTargetNamepace,
-  targetNamespace,
-  saveEdit,
   targetStorageClass
 } from '../views/plan.view';
 
@@ -128,7 +122,7 @@ export class Plan {
 
   selectStorageClass(name): void {
     cy.get(targetStorageClass).click();
-    clickByText('pf-c-select__menu-item', name);
+    clickByText('.pf-c-select__menu-wrapper', name);
   }
 
   protected waitForNotReady(name: string): void {

@@ -25,27 +25,27 @@ describe('mtc_83_storage_class_options', () => {
 
     // setup source cluster
     before('Setup clusters', () => {
-        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" "${sourceCluster}"`, {timeout: 200000});
-        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" "${targetCluster}"`, {timeout: 200000});
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000});
+        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, {timeout: 200000});
     });
 
     // login
-    it('login', () => {
+    it('Login', () => {
         login();
     })
 
     // create migplan
-    it('create migplan', () => {
+    it('Create migplan', () => {
         plan.create(planData);
     });
     // execute migplan
-    it('execute migplan', () => {
+    it('Execute migplan', () => {
         plan.execute(planData);
     });
 
     // validate & cleanup target cluster
     after('Validate Migration', () => {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target "${planData.namespaceList}" "${targetCluster}"`, {timeout: 100000});
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, {timeout: 100000});
     });
 
     // Verify that pvc is using default storageclass
@@ -54,7 +54,7 @@ describe('mtc_83_storage_class_options', () => {
     })
 
     // rollback migplan
-    it('rollback migplan', () => {
+    it('Rollback migplan', () => {
         plan.rollback(planData);
     });
 
@@ -74,10 +74,10 @@ describe('mtc_83_storage_class_options', () => {
         plan.waitForReady(planData.name);
     });
 
-    it('', () => {
-       run_command_oc('target', ` get migplan ${planData.name} -n openshift-migration -o yaml`).its('stdout').should('contain', 'type: PvNoStorageClassSelection');
+    // assert the PvNoStorageClassSelection warning exists
+    it('Assert the PvNoStorageClassSelection warning exists', () => {
+        run_command_oc('target', ` get migplan ${planData.name} -n openshift-migration -o yaml`).its('stdout').should('contain', 'type: PvNoStorageClassSelection');
     });
-
 
     // validate & cleanup target cluster
     after('Clean resources', () => {
