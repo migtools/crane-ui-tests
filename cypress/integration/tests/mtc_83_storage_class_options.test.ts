@@ -5,7 +5,7 @@ import {run_command_oc} from "../../utils/oc_wrapper";
 
 const sourceCluster = Cypress.env('sourceCluster');
 const targetCluster = Cypress.env('targetCluster');
-const configurationScript = "./cypress/utils/configuration_script.sh"
+const configurationScript = "../../utils/configuration_script.sh"
 
 describe('mtc_83_storage_class_options', () => {
 
@@ -25,10 +25,10 @@ describe('mtc_83_storage_class_options', () => {
 
     // setup source cluster
     before('Setup clusters', () => {
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000}).then((result) => {
+        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`).then((result) => {
             log('prepare_source_cluster', result)
         })
-        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, {timeout: 200000});
+        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`, {timeout: 200000});
     });
 
     // login
