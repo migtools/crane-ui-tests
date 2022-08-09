@@ -25,10 +25,10 @@ describe('mtc_83_storage_class_options', () => {
 
     // setup source cluster
     before('Setup clusters', () => {
-        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`, {timeout: 200000}).then((result) => {
+        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`, {timeout: 400000}).then((result) => {
             log('prepare_source_cluster', result)
         })
-        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`, {timeout: 200000});
+        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`, {timeout: 400000});
     });
 
     // login
