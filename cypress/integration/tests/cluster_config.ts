@@ -1,3 +1,4 @@
+import { Plan } from '../models/plan';
 import { ClusterData, PlanData } from '../types/types';
 import { RepoData } from '../types/types';
 
@@ -149,4 +150,22 @@ export const InterclusterState: PlanData = {
   target: 'host',
   repo: 'automatic',
   namespaceList: ['inter-state-plan-namespace']
+}
+
+export const IntraClusterStateSource: PlanData = {
+  name: 'intra-cluster-source',
+  migration_type: 'State migration',
+  source: 'source-cluster',
+  target: 'source-cluster',
+  repo: 'automatic',
+  namespaceList: ['intra-state-plan-source']
+}
+
+export const IntraClusterStateTarget: PlanData = {
+  name: 'intra-cluster-source',
+  migration_type: 'State migration',
+  source: 'host',
+  target: 'host',
+  repo: 'automatic',
+  namespaceList: ['intra-state-plan-host']
 }
