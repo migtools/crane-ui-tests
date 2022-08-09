@@ -5,7 +5,7 @@ import {run_command_oc} from "../../utils/oc_wrapper";
 
 const sourceCluster = Cypress.env('sourceCluster');
 const targetCluster = Cypress.env('targetCluster');
-const configurationScript = "../../utils/configuration_script.sh"
+const configurationScript = "./cypress/utils/configuration_script.sh"
 
 describe('mtc_83_storage_class_options', () => {
 
