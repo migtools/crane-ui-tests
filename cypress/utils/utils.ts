@@ -32,7 +32,7 @@ export function login(): void {
 }
 
 export function next(): void {
-  cy.xpath('//button[contains(text(), "Next")]')
+  cy.xpath('//button[contains(text(), "Next")]').click()
   // clickByText('button', 'Next');
 }
 
