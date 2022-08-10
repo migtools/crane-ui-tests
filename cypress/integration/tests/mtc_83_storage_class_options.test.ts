@@ -25,8 +25,8 @@ describe('mtc_83_storage_class_options', () => {
 
     // setup source cluster
     before('Setup clusters', () => {
-        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`);
-        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`);
+        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`, {timeout: 400000});
+        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`, {timeout: 400000});
     });
 
     // login
@@ -81,6 +81,6 @@ describe('mtc_83_storage_class_options', () => {
 
     // validate & cleanup target cluster
     after('Clean resources', () => {
-        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`);
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 400000});
     });
 });
