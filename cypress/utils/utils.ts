@@ -32,10 +32,12 @@ export function login(): void {
 }
 
 export function next(): void {
+  cy.wait(2000);
   clickByText('button', 'Next');
 }
 
 export function back(): void {
+  cy.wait(2000);
   clickByText('button', 'Back');
 }
 
