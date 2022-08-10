@@ -198,7 +198,7 @@ export class Plan {
 
   closeWizard() {
     //Assert that plan is successfully validated before being run
-    cy.get('span#condition-message').should('contain', 'The migration plan is ready');
+    cy.get('span#condition-message', {timeout: 20000}).should('contain', 'The migration plan is ready');
     cy.wait(500).findByText("Close").click();
   }
 
