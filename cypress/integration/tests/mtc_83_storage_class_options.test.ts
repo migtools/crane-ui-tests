@@ -1,5 +1,5 @@
 import {PlanData} from "../types/types";
-import {log, login, next} from "../../utils/utils";
+import {login, next} from "../../utils/utils";
 import {Plan} from "../models/plan";
 import {run_command_oc} from "../../utils/oc_wrapper";
 
@@ -25,10 +25,8 @@ describe('mtc_83_storage_class_options', () => {
 
     // setup source cluster
     before('Setup clusters', () => {
-        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`, {timeout: 400000}).then((result) => {
-            log('prepare_source_cluster', result)
-        })
-        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`, {timeout: 400000});
+        cy.exec(`"${configurationScript}" setup_source_cluster "${planData.namespaceList}" ${sourceCluster}`);
+        cy.exec(`"${configurationScript}" setup_target_cluster "${planData.namespaceList}" ${targetCluster}`);
     });
 
     // login
@@ -47,7 +45,7 @@ describe('mtc_83_storage_class_options', () => {
 
     // validate & cleanup target cluster
     after('Validate Migration', () => {
-        cy.exec(`""${configurationScript}"" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, {timeout: 100000});
+        cy.exec(`""${configurationScript}"" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`);
     });
 
     // Verify that pvc is using default storageclass
@@ -83,6 +81,6 @@ describe('mtc_83_storage_class_options', () => {
 
     // validate & cleanup target cluster
     after('Clean resources', () => {
-        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000});
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`);
     });
 });
