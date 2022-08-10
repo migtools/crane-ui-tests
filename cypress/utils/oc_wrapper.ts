@@ -1,5 +1,5 @@
-const sourceLoginString = Cypress.env('sourceCluster')
-const targetLoginString = Cypress.env('targetCluster')
+const sourceLoginString = Cypress.env('sourceCluster').replaceAll('"','')
+const targetLoginString = Cypress.env('targetCluster').replaceAll('"','')
 
 
 //Backend Utils
