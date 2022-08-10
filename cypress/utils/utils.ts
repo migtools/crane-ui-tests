@@ -12,7 +12,7 @@ export function inputText(fieldId: string, text: string): void {
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
-  cy.contains(fieldId, buttonText).click();
+  cy.wait(500).contains(fieldId, buttonText).click();
 }
 
 export function click(fieldId: string): void {
@@ -32,7 +32,8 @@ export function login(): void {
 }
 
 export function next(): void {
-  clickByText('button', 'Next');
+  cy.xpath('//button[contains(text(), "Next")]')
+  // clickByText('button', 'Next');
 }
 
 export function back(): void {
