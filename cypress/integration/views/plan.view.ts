@@ -14,6 +14,7 @@ export const targetNamespace = 'input[name="currentTargetNamespaceName"]';
 
 //Plan creation form - copy options page
 export const verifyCopyCheckbox = '.pf-c-check__input';
+export const targetStorageClass = '#select-storage-class';
 
 //Plan creation form - Migration options page
 export const directPvMigrationCheckbox = '#indirectVolumeMigration';

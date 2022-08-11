@@ -36,7 +36,7 @@ selectorTuple.forEach(($type) => {
 
     // run before the all coming tests
     before('Setting up Clusters', () => {
-      cy.wait(10000)
+      // cy.wait(10000)
 
       if (`${planData.migration_type}` == 'Storage class conversion') {
 
@@ -47,10 +47,10 @@ selectorTuple.forEach(($type) => {
         });
       }
       else {
-        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 200000 }).then((result) => {
+        cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 200000 }).then((result) => {
           log(`'${migrationType}_setup_source_cluster'`, result)
         });
-        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, { timeout: 200000 }).then((result) => {
+        cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} "${targetCluster}"`, { timeout: 200000 }).then((result) => {
           log(`'${migrationType}_setup_target_cluster'`, result)
         });
       }
@@ -75,7 +75,6 @@ selectorTuple.forEach(($type) => {
     if (`${migrationType}`.indexOf('Rollover') >= 0) {
       it('Execute Rollback', () => {
         plan.rollback(planData);
-        plan.execute(planData);
       });
     }
 
@@ -95,15 +94,15 @@ selectorTuple.forEach(($type) => {
     after('Validate Migration & clean resources', () => {
 
       if (`${planData.migration_type}` == 'Storage class conversion') {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 }).then((result) => {
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 }).then((result) => {
           log(`'${migrationType}_post_migration_verification_on_target'`, result)
         });
       }
       else {
-        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, { timeout: 100000 }).then((result) => {
+        cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} "${targetCluster}"`, { timeout: 100000 }).then((result) => {
           log(`'${migrationType}_post_migration_verification_on_target'`, result)
         });
-        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, { timeout: 100000 }).then((result) => {
+        cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} "${sourceCluster}"`, { timeout: 100000 }).then((result) => {
           log(`'${migrationType}_cleanup_source_cluster'`, result)
         });
       }
