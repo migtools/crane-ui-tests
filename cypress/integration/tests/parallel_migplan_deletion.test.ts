@@ -1,5 +1,5 @@
 import {noVerifyCopyPlanData, verifyCopyPlanData, directPvPlanData} from './cluster_config';
-import {login} from '../../utils/utils';
+import {log, login} from '../../utils/utils';
 import {Plan} from '../models/plan'
 import {PlanData} from "../types/types";
 import {run_command_oc} from "../../utils/oc_wrapper";
@@ -68,7 +68,9 @@ describe('Automate deletion of multiple migration plans', () => {
         const [planData, migrationType] = $type;
         // clean migplans
         it(`${migrationType}`, () => {
-            cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000});
+            cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000}).then((result) => {
+                log(`cleanup_${migrationType}`,result)
+            });
         });
     });
 });
