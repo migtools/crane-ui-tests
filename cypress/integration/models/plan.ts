@@ -148,7 +148,7 @@ export class Plan {
       .contains(name, { timeout: 10000 })
       .closest('tr')
       .within(() => {
-        cy.get(dataLabel.status).contains('Migration succeeded', { timeout: 900000 });
+        cy.get(dataLabel.status).contains('Migration succeeded', { timeout: 1900000 });
       });
   }
 
@@ -157,7 +157,7 @@ export class Plan {
       .contains(name, { timeout: 10000 })
       .closest('tr')
       .within(() => {
-        cy.get(dataLabel.status).contains('Rollback succeeded', { timeout: 900000 });
+        cy.get(dataLabel.status).contains('Rollback succeeded', { timeout: 1900000 });
       });
   }
 
