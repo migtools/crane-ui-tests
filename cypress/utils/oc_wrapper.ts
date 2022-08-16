@@ -1,20 +1,18 @@
-import { result } from "cypress/types/lodash";
-
-const sourceCluster = Cypress.env('sourceCluster')
-const targetCluster = Cypress.env('targetCluster')
+const sourceLoginString = Cypress.env('sourceCluster').replaceAll('"','')
+const targetLoginString = Cypress.env('targetCluster').replaceAll('"','')
 
 
 //Backend Utils
 
 export function loginToSource(): void {
-    cy.log("Logging in to source cluster: " + sourceCluster)
-    cy.exec(sourceCluster + ' --insecure-skip-tls-verify');
+    cy.log("Logging in to source cluster: " + sourceLoginString)
+    cy.exec(sourceLoginString);
     cy.wait(2000)
 }
   
 export function loginToTarget(): void {
-    cy.log("Logging in to target cluster: " + targetCluster)
-    cy.exec(targetCluster + ' --insecure-skip-tls-verify');
+    cy.log("Logging in to target cluster: " + targetLoginString)
+    cy.exec(targetLoginString);
     cy.wait(2000)
 }
 
