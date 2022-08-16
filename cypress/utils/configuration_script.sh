@@ -29,6 +29,9 @@ setup_target_cluster() {
     if (oc get project $i 2>/dev/null); then
       oc delete project $i
     fi
+    while (oc get project $i 2>/dev/null); do
+      sleep 5
+    done
   done
   oc delete migplan --all -n openshift-migration
 }
@@ -40,6 +43,9 @@ cleanup_source_cluster() {
     if (oc get project $i 2>/dev/null); then
       oc delete project $i
     fi
+    while (oc get project $i 2>/dev/null); do
+      sleep 5
+    done
   done
 }
 
@@ -53,6 +59,9 @@ post_migration_verification_on_target() {
     if (oc get project $i 2>/dev/null); then
       oc delete project $i
     fi
+    while (oc get project $i 2>/dev/null); do
+      sleep 5
+    done
   done
 }
 

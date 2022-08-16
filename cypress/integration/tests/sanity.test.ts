@@ -41,12 +41,12 @@ const selectorTuple: [PlanData, string][] = [
     // [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
     // [directImagePvPlan, 'Direct image and PV migration'],
     // [InterclusterState, 'Inter cluster state migration plan'],
-    // [storageClassConversionSource, 'Storage class conversion - Source cluster'],
+    [storageClassConversionSource, 'Storage class conversion - Source cluster'],
     [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
-    // [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
-    // [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
-    // [IntraClusterStateSource, 'Intra cluster state migration - Source cluster'],
-    // [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
+    [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
+    [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
+    [IntraClusterStateSource, 'Intra cluster state migration - Source cluster'],
+    [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
 ];
 
 
@@ -64,7 +64,6 @@ selectorTuple.forEach(($type) => {
 
     describe(`'${migrationType}'`, () => {
 
-
         // run before the all coming tests
         before('Setting up Clusters', () => {
             const selectedCluster = (planData.source == 'source-cluster') ? 'source' : 'target'
@@ -72,9 +71,7 @@ selectorTuple.forEach(($type) => {
                 let count: number = result.stdout
                 skipOn(count <= 2)
             });
-
             // cy.wait(10000)
-
             if (`${planData.migration_type}` == 'Storage class conversion') {
 
                 (`${planData.source}` == 'source-cluster') ? scc_cluster = sourceCluster : scc_cluster = targetCluster
