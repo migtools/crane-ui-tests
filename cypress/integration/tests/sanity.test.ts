@@ -66,18 +66,22 @@ selectorTuple.forEach(($type) => {
 
         // run before the all coming tests
         before('Setting up Clusters', () => {
-            run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
-                let count: number = result.stdout
-                skipOn(count <= 2)
-            });
             // cy.wait(10000)
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
-                (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster
+                (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
+
+                if (planData.migration_type == 'Storage class conversion') {
+                    run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
+                        let count: number = result.stdout
+                        skipOn(count <= 2)
+                    });
+                }
 
                 cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_source_cluster'`, result)
                 });
+
             } else {
                 cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_source_cluster'`, result)
