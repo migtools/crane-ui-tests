@@ -41,12 +41,12 @@ const selectorTuple: [PlanData, string][] = [
     // [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
     // [directImagePvPlan, 'Direct image and PV migration'],
     // [InterclusterState, 'Inter cluster state migration plan'],
-    [storageClassConversionSource, 'Storage class conversion - Source cluster'],
+    // [storageClassConversionSource, 'Storage class conversion - Source cluster'],
     [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
-    [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
-    [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
-    [IntraClusterStateSource, 'Intra cluster state migration - Source cluster'],
-    [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
+    // [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
+    // [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
+    // [IntraClusterStateSource, 'Intra cluster state migration - Source cluster'],
+    // [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
 ];
 
 
