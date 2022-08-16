@@ -42,8 +42,10 @@ export function back(): void {
 }
 
 export function selectFromDroplist(selector: string, selectionMade: string): void {
-  clickByText('button', selector);
-  clickByText('button', selectionMade);
+  cy.get(`#${selector}`).click()
+  cy.get(`ul#${selector}`).within(() => {
+    cy.get('li').contains(selectionMade).click()
+  })
 }
 
 export function getTd(columnValue: string, locator: string, tdValue: string): void {
@@ -72,11 +74,11 @@ export function navigateToPage(pageName: pages): void {
 
 export function fillGeneralFields(name, source, target, repo, migration_type): void {
   inputText(planNameInput, name);
-  selectFromDroplist('Select...', migration_type)
-  selectFromDroplist('Select source', source);
+  selectFromDroplist('migrationType', migration_type)
+  selectFromDroplist('sourceCluster', source);
   if (migration_type == 'Full migration' || migration_type == 'State migration') {
-    selectFromDroplist('Select target', target);
-    selectFromDroplist('Select repository', repo);
+    selectFromDroplist('targetCluster', target);
+    selectFromDroplist('selectedStorage', repo);
   }
 }
 
