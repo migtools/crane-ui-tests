@@ -28,19 +28,19 @@ const configurationScript = "./cypress/utils/configuration_script.sh"
 const plan = new Plan();
 
 const selectorTuple: [PlanData, string][] = [
-    // [directImagePlanData, 'Direct image migration without copy verification'],
-    // [directPvPlanData, 'Direct PV migration without copy verification'],
-    // [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
-    // [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
-    // [verifyCopyPlanData, 'Direct migration with copy verification'],
-    // [noVerifyCopyPlanData, 'Rollover indirect migration and then migrate'],
-    // [directImagePvPlan, 'Rollover direct migration and then migrate'],
-    // [indirectMultipleProjects, 'Indirect migration of multiple projects'],
-    // [directMultipleProjects, 'direct migration of multiple projects'],
-    // [changeTargetNamespace, 'Direct migration of a single project to non-default target namespace'],
-    // [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
-    // [directImagePvPlan, 'Direct image and PV migration'],
-    // [InterclusterState, 'Inter cluster state migration plan'],
+    [directImagePlanData, 'Direct image migration without copy verification'],
+    [directPvPlanData, 'Direct PV migration without copy verification'],
+    [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
+    [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
+    [verifyCopyPlanData, 'Direct migration with copy verification'],
+    [noVerifyCopyPlanData, 'Rollover indirect migration and then migrate'],
+    [directImagePvPlan, 'Rollover direct migration and then migrate'],
+    [indirectMultipleProjects, 'Indirect migration of multiple projects'],
+    [directMultipleProjects, 'direct migration of multiple projects'],
+    [changeTargetNamespace, 'Direct migration of a single project to non-default target namespace'],
+    [IndirectChangeTargetNamespace, 'Indirect migration of a single project to non-default target namespace'],
+    [directImagePvPlan, 'Direct image and PV migration'],
+    [InterclusterState, 'Inter cluster state migration plan'],
     [storageClassConversionSource, 'Storage class conversion - Source cluster'],
     [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
     [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
@@ -59,24 +59,23 @@ describe('Login to MTC UI', () => {
 
 selectorTuple.forEach(($type) => {
     const [planData, migrationType] = $type;
-    let scc_cluster = null
+    let selectedCluster = null
 
 
     describe(`'${migrationType}'`, () => {
 
         // run before the all coming tests
         before('Setting up Clusters', () => {
-            const selectedCluster = (planData.source == 'source-cluster') ? 'source' : 'target'
-            run_command_oc(selectedCluster, 'get sc | wc -l').then((result) => {
+            run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
                 let count: number = result.stdout
                 skipOn(count <= 2)
             });
             // cy.wait(10000)
-            if (`${planData.migration_type}` == 'Storage class conversion') {
+            if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
-                (`${planData.source}` == 'source-cluster') ? scc_cluster = sourceCluster : scc_cluster = targetCluster
+                (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster
 
-                cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${scc_cluster}`, {timeout: 200000}).then((result) => {
+                cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_source_cluster'`, result)
                 });
             } else {
@@ -120,8 +119,8 @@ selectorTuple.forEach(($type) => {
         // validate & clean
         after('Validate Migration & clean resources', () => {
 
-            if (`${planData.migration_type}` == 'Storage class conversion') {
-                cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, {timeout: 100000}).then((result) => {
+            if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
+                cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${selectedCluster}`, {timeout: 100000}).then((result) => {
                     log(`'${migrationType}_post_migration_verification_on_target'`, result)
                 });
             } else {
