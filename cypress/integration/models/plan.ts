@@ -14,46 +14,27 @@ import {
 
 
 export class Plan {
-  protected static openList(): void {
-    clickByText(navMenuPoint, 'Migration plans');
-  }
+    protected static openList(): void {
+        clickByText(navMenuPoint, 'Migration plans');
+    }
 
-  generalStep(planData: PlanData): void {
-    const { name, source, target, repo, migration_type } = planData;
-    fillGeneralFields(name, source, target, repo, migration_type)
-    next();
-  }
+    generalStep(planData: PlanData): void {
+        const {name, source, target, repo, migration_type} = planData;
+        fillGeneralFields(name, source, target, repo, migration_type)
+        next();
+    }
 
-  selectNamespace(planData: PlanData): void {
-    const { namespaceList, nondefaultTargetNamespace } = planData;
-    namespaceList.forEach((name) => {
-
-      searchAndSelectNamespace(name);
-
-      // inputText(searchInput, name);
-      // cy.get(searchButton).first().click();
-      // cy.get('td')
-      //   .contains(name)
-      //   .parent('tr')
-      //   .within(() => {
-      //     click('input');
-      //   });
-
-      //Update target namespace if project is being migrated to non default namespace
-      if (nondefaultTargetNamespace) {
-        editTargetNamespace(name);
-        // cy.get('td')
-        //   .contains(name)
-        //   .parent('tr')
-        //   .within(() => {
-        //     click(editTargetNamepace);
-        // });
-        // inputText(targetNamespace, 'non-default');
-        // click(saveEdit);
-      }
-    });
-    next();
-  }
+    selectNamespace(planData: PlanData): void {
+        const {namespaceList, nondefaultTargetNamespace} = planData;
+        namespaceList.forEach((name) => {
+            searchAndSelectNamespace(name);
+            //Update target namespace if project is being migrated to non default namespace
+            if (nondefaultTargetNamespace) {
+                editTargetNamespace(name);
+            }
+        });
+        next();
+    }
 
   persistentVolumes(): void {
     //Wait for PVs to be listed and the 'Next' button to be enabled
@@ -152,18 +133,18 @@ export class Plan {
       });
   }
 
-  protected waitForRollbackSuccess(name: string): void {
-    cy.get('th')
-      .contains(name, { timeout: 10000 })
-      .closest('tr')
-      .within(() => {
-        cy.get(dataLabel.status).contains('Rollback succeeded', { timeout: 900000 });
-      });
-  }
+    protected waitForRollbackSuccess(name: string): void {
+        cy.get('th')
+            .contains(name, {timeout: 10000})
+            .closest('tr')
+            .within(() => {
+                cy.get(dataLabel.status).contains('Rollback succeeded', {timeout: 900000});
+            });
+    }
 
-  stepStatus(step): void {
-    getTd(step, '[data-label="Status"]', 'Complete');
-  }
+    stepStatus(step): void {
+        getTd(step, '[data-label="Status"]', 'Complete');
+    }
 
   stepProgress(step): void {
     getTd(step, '.pf-c-progress__measure', '100%');
@@ -172,22 +153,22 @@ export class Plan {
   create(planData: PlanData): void {
     const { name } = planData;
 
-    //Navigate to 'Migration plans tab and create a new plan
-    Plan.openList();
-    clickByText('button', 'Add migration plan');
-    this.generalStep(planData);
-    this.selectNamespace(planData);
-    this.persistentVolumes();
+        //Navigate to 'Migration plans tab and create a new plan
+        Plan.openList();
+        clickByText('button', 'Add migration plan');
+        this.generalStep(planData);
+        this.selectNamespace(planData);
+        this.persistentVolumes();
 
-    if (planData.migration_type == 'State migration') {
-      this.copyOptions(planData);
-    }
+        if (planData.migration_type == 'State migration') {
+            this.copyOptions(planData);
+        }
 
-    if (planData.migration_type == 'Full migration') {
-      this.copyOptions(planData);
-      this.migrationOptions(planData);
-      this.hooks();
-    }
+        if (planData.migration_type == 'Full migration') {
+            this.copyOptions(planData);
+            this.migrationOptions(planData);
+            this.hooks();
+        }
 
     // close the migplan creation wizard
     this.closeWizard()
@@ -202,12 +183,12 @@ export class Plan {
     cy.wait(500).findByText("Close").click();
   }
 
-  execute(planData: PlanData): void {
-    const { name, migration_type } = planData;
-    Plan.openList();
-    this.run(name, migration_type);
-    this.waitForSuccess(name);
-  }
+    execute(planData: PlanData): void {
+        const {name, migration_type} = planData;
+        Plan.openList();
+        this.run(name, migration_type);
+        this.waitForSuccess(name);
+    }
 
   pipelineStatus(migrationType: string, planData: PlanData): void {
     const { name } = planData;
@@ -250,38 +231,40 @@ export class Plan {
       this.stepProgress('Restore');
   }
 
-  delete(planData: PlanData): void {
-    const { name } = planData;
-    Plan.openList();
-    cy.get('th')
-      .contains(name)
-      .parent('tr')
-      .within(() => {
-        click(kebab);
-    });
-    clickByText(kebabDropDownItem, 'Delete');
+    delete(planData: PlanData, confirm?: boolean): void {
+        const {name} = planData;
+        Plan.openList();
+        cy.get('th')
+            .contains(name)
+            .parent('tr')
+            .within(() => {
+                click(kebab);
+            });
+        clickByText(kebabDropDownItem, 'Delete');
 
-    //Confirm dialog before deletion
-    clickByText('button', 'Confirm');
+        //Confirm dialog before deletion
+        clickByText('button', 'Confirm');
 
-    //Wait for plan to be deleted
-    cy.findByText(`Successfully removed plan "${name}"!`, {timeout : 15000});
-  }
+        //Wait for plan to be deleted
+        if (confirm) {
+            cy.findByText(`Successfully removed plan "${name}"!`, {timeout: 15000});
+        }
+    }
 
-  rollback(planData: PlanData): void {
-    const { name } = planData;
-    Plan.openList();
-    cy.get('th')
-      .contains(name)
-      .parent('tr')
-      .within(() => {
-        click(kebab);
-    });
-    clickByText(kebabDropDownItem, 'Rollback');
+    rollback(planData: PlanData): void {
+        const {name} = planData;
+        Plan.openList();
+        cy.get('th')
+            .contains(name)
+            .parent('tr')
+            .within(() => {
+                click(kebab);
+            });
+        clickByText(kebabDropDownItem, 'Rollback');
 
-    //Confirm dialog before Rollback migration
-    clickByText('button', 'Rollback');
+        //Confirm dialog before Rollback migration
+        clickByText('button', 'Rollback');
 
-    this.waitForRollbackSuccess(name);
-  }
+        this.waitForRollbackSuccess(name);
+    }
 }
