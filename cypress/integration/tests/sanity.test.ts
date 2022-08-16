@@ -18,6 +18,8 @@ import {
 import {login, log} from '../../utils/utils';
 import {Plan} from '../models/plan'
 import {PlanData} from '../types/types';
+import {run_command_oc} from "../../utils/oc_wrapper";
+import {skipOn} from '@cypress/skip-test'
 
 const sourceCluster = Cypress.env('sourceCluster');
 const targetCluster = Cypress.env('targetCluster');
@@ -26,7 +28,7 @@ const configurationScript = "./cypress/utils/configuration_script.sh"
 const plan = new Plan();
 
 const selectorTuple: [PlanData, string][] = [
-    [directImagePlanData, 'Direct image migration without copy verification'],
+    // [directImagePlanData, 'Direct image migration without copy verification'],
     // [directPvPlanData, 'Direct PV migration without copy verification'],
     // [verifyCopydirectPvPlan, 'Direct PV migration with copy verification'],
     // [noVerifyCopyPlanData, 'Indirect migration without copy verification'],
@@ -40,28 +42,40 @@ const selectorTuple: [PlanData, string][] = [
     // [directImagePvPlan, 'Direct image and PV migration'],
     // [InterclusterState, 'Inter cluster state migration plan'],
     [storageClassConversionSource, 'Storage class conversion - Source cluster'],
-    // [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
-    // [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
-    // [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
+    [storageClassConversionTarget, 'Storage class conversion - Target cluster'],
+    [storageClassConversionSource, 'Storage class conversion - Source-Rollover'],
+    [storageClassConversionTarget, 'Storage class conversion - Target-Rollover'],
     [IntraClusterStateSource, 'Intra cluster state migration - Source cluster'],
-    // [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
+    [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
 ];
 
 
-describe('Login to MTC UI', () => {
-    // login
-    it('Login', () => {
-        login();
-    });
-});
+// describe('Login to MTC UI', () => {
+//     // login
+//     it('Login', () => {
+//         login();
+//     });
+// });
 
 selectorTuple.forEach(($type) => {
     const [planData, migrationType] = $type;
     let scc_cluster = null
+
+
     describe(`'${migrationType}'`, () => {
+
 
         // run before the all coming tests
         before('Setting up Clusters', () => {
+            const selectedCluster = (planData.source == 'source-cluster') ? 'source' : 'target'
+            run_command_oc(selectedCluster, 'get sc | wc -l').then((result) => {
+                cy.log(`count: ${result.stdout}`)
+                let count: number = result.stdout
+                if (count <= 2) {
+                    skipOn(count <= 2)
+                }
+            });
+
             // cy.wait(10000)
 
             if (`${planData.migration_type}` == 'Storage class conversion') {
@@ -80,7 +94,6 @@ selectorTuple.forEach(($type) => {
                 });
             }
         });
-
         // Create Migplan
         it('Create Migplan', () => {
             plan.create(planData);
