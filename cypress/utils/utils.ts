@@ -19,7 +19,7 @@ export function inputText(fieldId: string, text: string): void {
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
-    cy.wait(500).contains(fieldId, buttonText).click();
+  cy.wait(500).contains(fieldId, buttonText).click();
 }
 
 export function click(fieldId: string): void {
@@ -39,13 +39,13 @@ export function login(): void {
 }
 
 export function next(): void {
-    cy.wait(2000);
-    clickByText('button', 'Next');
+  cy.wait(2000);
+  clickByText('button', 'Next');
 }
 
 export function back(): void {
-    cy.wait(2000);
-    clickByText('button', 'Back');
+  cy.wait(2000);
+  clickByText('button', 'Back');
 }
 
 export function selectFromDroplist(selector: string, selectionMade: string): void {
