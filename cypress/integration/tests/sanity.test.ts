@@ -50,12 +50,12 @@ const selectorTuple: [PlanData, string][] = [
 ];
 
 
-// describe('Login to MTC UI', () => {
-//     // login
-//     it('Login', () => {
-//         login();
-//     });
-// });
+describe('Login to MTC UI', () => {
+    // login
+    it('Login', () => {
+        login();
+    });
+});
 
 selectorTuple.forEach(($type) => {
     const [planData, migrationType] = $type;
@@ -69,11 +69,8 @@ selectorTuple.forEach(($type) => {
         before('Setting up Clusters', () => {
             const selectedCluster = (planData.source == 'source-cluster') ? 'source' : 'target'
             run_command_oc(selectedCluster, 'get sc | wc -l').then((result) => {
-                cy.log(`count: ${result.stdout}`)
                 let count: number = result.stdout
-                if (count <= 2) {
-                    skipOn(count <= 2)
-                }
+                skipOn(count <= 2)
             });
 
             // cy.wait(10000)
