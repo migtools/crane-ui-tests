@@ -52,9 +52,7 @@ const selectorTuple: [PlanData, string][] = [
 
 describe('Login to MTC UI', () => {
     // login
-    it('Login', () => {
-        login();
-    });
+
 });
 
 selectorTuple.forEach(($type) => {
@@ -91,6 +89,12 @@ selectorTuple.forEach(($type) => {
                 });
             }
         });
+
+        // login
+        it('Login', () => {
+            login();
+        });
+
         // Create Migplan
         it('Create Migplan', () => {
             plan.create(planData);
