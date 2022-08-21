@@ -49,12 +49,6 @@ const selectorTuple: [PlanData, string][] = [
     [IntraClusterStateTarget, 'Intra cluster state migration - Target cluster']
 ];
 
-
-describe('Login to MTC UI', () => {
-    // login
-
-});
-
 selectorTuple.forEach(($type) => {
     const [planData, migrationType] = $type;
     let selectedCluster = null
