@@ -57,7 +57,7 @@ selectorTuple.forEach(($type) => {
     describe(`'${migrationType}'`, () => {
 
         // run before the all coming tests
-        before('Setting up Clusters', () => {
+        it('Setting up Clusters', () => {
             // cy.wait(10000)
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
