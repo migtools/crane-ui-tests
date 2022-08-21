@@ -136,7 +136,8 @@ export class Plan {
             .contains(name, {timeout: 10000})
             .closest('tr')
             .within(() => {
-                !cy.get(dataLabel.status).contains('Cutover failed', {timeout: 1900000})
+                // todo: find a way to skip timeout from 30 minutes when a migration fails
+                // !cy.get(dataLabel.status).contains('Cutover failed', {timeout: 1900000})
                 cy.get(dataLabel.status).contains('Migration succeeded', {timeout: 1900000});
             });
     }
