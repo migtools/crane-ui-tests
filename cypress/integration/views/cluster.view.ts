@@ -6,4 +6,4 @@ export const addButtonModal = 'button.pf-c-button.pf-m-primary';
 export const addNewCluster = '#add-cluster-btn';
 export const closeWizard = 'button.pf-c-button.pf-m-secondary';
 export const status = '[data-label="Status"]';
-export const confirm = '.pf-c-button pf-m-primary';
+export const confirm = '.pf-c-button.pf-m-primary';
