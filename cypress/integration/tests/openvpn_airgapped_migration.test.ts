@@ -38,44 +38,44 @@ const dataPlans: PlanData[] = [
     }
 ]
 
-// describe('Setup crane tunnel', () => {
-//
-//     it('Initialize crane connection', () => {
-//         run_command_oc('source', 'get proxy -o yaml | grep \'httpProxy\' | head -1').then(($el) => {
-//             let proxy_str: string;
-//             ($el.stdout == '') ? proxy_str = '' : proxy_str = $el.stdout.split(": ")[1].trim()
-//             cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`, {timeout: 1800000})
-//                 .its('stdout')
-//                 .should('contain', 'SSL Certificate generation complete');
-//             log('setup_crane', $el);
-//         });
-//     });
-//
-//     // login and wait some time
-//     it('wait 10 minutes & login', () => {
-//         cy.wait(1200000);
-//         login();
-//     });
-//
-//     it('Add new tunneled connection cluster', () => {
-//         run_command_oc('source', "sa get-token -n openshift-migration migration-controller").then(($el) => {
-//             const url = 'https://proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:8443'
-//             const registry_path = 'proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:5000'
-//             const clusterData = {
-//                 name: clusterName,
-//                 url: url,
-//                 token: $el.stdout,
-//                 registryPath: registry_path
-//             }
-//             cluster.addCluster(clusterData);
-//             cluster.close();
-//         });
-//     });
-//
-//     it('Waiting for cluster to be connected', () => {
-//         cluster.waitForConnected(clusterName);
-//     });
-// });
+describe('Setup crane tunnel', () => {
+
+    it('Initialize crane connection', () => {
+        run_command_oc('source', 'get proxy -o yaml | grep \'httpProxy\' | head -1').then(($el) => {
+            let proxy_str: string;
+            ($el.stdout == '') ? proxy_str = '' : proxy_str = $el.stdout.split(": ")[1].trim()
+            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`, {timeout: 1800000})
+                .its('stdout')
+                .should('contain', 'SSL Certificate generation complete');
+            log('setup_crane', $el);
+        });
+    });
+
+    // login and wait some time
+    it('wait 10 minutes & login', () => {
+        cy.wait(1500000);
+        login();
+    });
+
+    it('Add new tunneled connection cluster', () => {
+        run_command_oc('source', "sa get-token -n openshift-migration migration-controller").then(($el) => {
+            const url = 'https://proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:8443'
+            const registry_path = 'proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:5000'
+            const clusterData = {
+                name: clusterName,
+                url: url,
+                token: $el.stdout,
+                registryPath: registry_path
+            }
+            cluster.addCluster(clusterData);
+            cluster.close();
+        });
+    });
+
+    it('Waiting for cluster to be connected', () => {
+        cluster.waitForConnected(clusterName);
+    });
+});
 
 dataPlans.forEach(planData => {
     describe(`${planData.name}`, () => {
@@ -120,18 +120,18 @@ dataPlans.forEach(planData => {
     });
 });
 
-// describe('Clean crane resources', () => {
-//
-//     // login to the UI
-//     it('Login', () => {
-//         login();
-//     });
-//     // remove the cluster
-//     it('Remove Cluster', () => {
-//         cluster.removeCluster(clusterName)
-//     });
-//     // validate & clean
-//     it('Remove crane setup', () => {
-//         cy.exec(`"${craneConfigurationScript}" clean_crane ${sourceCluster} ${targetCluster}`, {timeout: 1800000});
-//     });
-// });
+describe('Clean crane resources', () => {
+
+    // login to the UI
+    it('Login', () => {
+        login();
+    });
+    // remove the cluster
+    it('Remove Cluster', () => {
+        cluster.removeCluster(clusterName)
+    });
+    // validate & clean
+    it('Remove crane setup', () => {
+        cy.exec(`"${craneConfigurationScript}" clean_crane ${sourceCluster} ${targetCluster}`, {timeout: 1800000});
+    });
+});
