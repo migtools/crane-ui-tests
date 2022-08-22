@@ -19,7 +19,7 @@ const dataPlans: PlanData[] = [
     {
         name: 'indirect-air-gapped-migration',
         migration_type: 'Full migration',
-        source: 'vpn-tunnel-source',
+        source: `${clusterName}`,
         target: 'host',
         repo: 'automatic',
         namespaceList: ['indirect-air-gapped-namespace'],
@@ -29,7 +29,7 @@ const dataPlans: PlanData[] = [
     {
         name: 'direct-air-gapped-migration',
         migration_type: 'Full migration',
-        source: 'vpn-tunnel-source',
+        source: `${clusterName}`,
         target: 'host',
         repo: 'automatic',
         namespaceList: ['direct-air-gapped-namespace'],
@@ -51,8 +51,10 @@ describe('Setup crane tunnel', () => {
         });
     });
 
-    it('wait 10 minutes', () => {
+    // login and wait some time
+    it('wait 10 minutes & login', () => {
         cy.wait(1200000);
+        login();
     });
 
     it('Add new tunneled connection cluster', () => {
@@ -89,7 +91,7 @@ dataPlans.forEach(planData => {
             });
         });
 
-        // login and wait some time
+        // login
         it('Login', () => {
             login();
         });

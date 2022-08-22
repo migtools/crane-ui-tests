@@ -25,6 +25,8 @@ setup_crane() {
     done
   fi
 
+  sleep 120
+
   # mkdir crane_temp
   # shellcheck disable=SC2164
   cd ./crane_temp
