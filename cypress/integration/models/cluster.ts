@@ -3,6 +3,7 @@ import { click, clickByText, inputText } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import { ClusterData } from '../types/types';
 import { clusterName, clusterUrl, instanceToken, addButtonModal, exposedRegistryPath, addNewCluster, closeWizard } from '../views/cluster.view';
+import {kebab, kebabDropDownItem} from "../views/plan.view";
 
 export class Cluster {
   protected static openLi(): void {
@@ -44,5 +45,15 @@ export class Cluster {
             .map((el) => el.innerText)
         )
       });
+  }
+
+  removeCluster(clusterName: String) {
+    cy.get('th')
+        .contains(clusterName)
+        .parent('tr')
+        .within(() => {
+          click(kebab);
+        });
+    clickByText(kebabDropDownItem, 'Delete');
   }
 }
