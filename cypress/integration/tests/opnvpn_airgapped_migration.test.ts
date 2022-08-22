@@ -117,6 +117,9 @@ const clusterName = 'vpn-tunnel-source'
 
 describe('Clean crane resources', () => {
 
+    it('Login', () => {
+        login();
+    });
     // remove the cluster
     it('Remove Cluster', () => {
         cluster.removeCluster(clusterName)
