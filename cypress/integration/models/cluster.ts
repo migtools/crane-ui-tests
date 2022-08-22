@@ -10,7 +10,7 @@ import {
     exposedRegistryPath,
     addNewCluster,
     closeWizard,
-    status
+    status, confirm
 } from '../views/cluster.view';
 import {kebab, kebabDropDownItem} from "../views/plan.view";
 
@@ -51,6 +51,7 @@ export class Cluster {
                 click(kebab);
             });
         clickByText(kebabDropDownItem, 'Remove');
+        clickByText(confirm, 'Confirm');
     }
 
     waitForConnected(ClusterName: String) {
