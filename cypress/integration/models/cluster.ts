@@ -50,7 +50,7 @@ export class Cluster {
             .within(() => {
                 click(kebab);
             });
-        clickByText(kebabDropDownItem, 'Delete');
+        clickByText(kebabDropDownItem, 'Remove');
     }
 
     waitForConnected(ClusterName: String) {
