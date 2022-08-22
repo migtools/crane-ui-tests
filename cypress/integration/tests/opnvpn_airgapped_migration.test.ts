@@ -69,6 +69,10 @@ const clusterName = 'vpn-tunnel-source'
 //             cluster.close();
 //         });
 //     });
+//
+//     it('Waiting for cluster to be connected', () => {
+//         cluster.waitForConnected(clusterName);
+//     });
 // });
 //
 //
