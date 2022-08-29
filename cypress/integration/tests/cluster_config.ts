@@ -1,4 +1,3 @@
-import { Plan } from '../models/plan';
 import { ClusterData, PlanData } from '../types/types';
 import { RepoData } from '../types/types';
 
@@ -162,7 +161,7 @@ export const IntraClusterStateSource: PlanData = {
 }
 
 export const IntraClusterStateTarget: PlanData = {
-  name: 'intra-cluster-source',
+  name: 'intra-cluster-target',
   migration_type: 'State migration',
   source: 'host',
   target: 'host',

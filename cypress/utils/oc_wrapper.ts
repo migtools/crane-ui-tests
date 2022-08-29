@@ -42,7 +42,7 @@ export function create_resource(resource: string): void {
     });
 }
 
-export function run_command_oc(cluster: string, command: string): any {
+export function run_command_oc(cluster: string, command: string): Cypress.Chainable<undefined> {
 
     if (cluster=="source") {
         loginToSource();
@@ -50,7 +50,6 @@ export function run_command_oc(cluster: string, command: string): any {
     else {
         loginToTarget();
     }
-
     return cy.exec("oc "+ command);
 }
   

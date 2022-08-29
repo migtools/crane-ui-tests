@@ -2,8 +2,7 @@
   "viewportWidth": 1920,
   "viewportHeight": 1080,
   "supportFile": "cypress/support/commands.js",
-  "video": true,
-  "videoCompression": 15,
+  "video": false,
   "env": {
         "user": "",
         "password": "",
@@ -12,9 +11,8 @@
         "targetCluster": ""
    },
   "retries": {
-        "runMode": 2,
-        "openMode": 0
+        "runMode": 3,
+        "openMode": 3
    },
-  "defaultCommandTimeout": 10000 
-
+  "defaultCommandTimeout": 10000
 }
