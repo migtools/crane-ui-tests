@@ -35,7 +35,7 @@ setup_crane() {
   DESTINATION_CONTEXT=$(oc config current-context)
 
   if [[ $PROXY_STR == "" ]]; then
-    ./crane tunnel-api --namespace ${NAMESPACE} --destination-context "${DESTINATION_CONTEXT}" --source-context "${SOURCE_CONTEXT}"
+    ./crane tunnel-api --namespace ${NAMESPACE} --destination-context ${DESTINATION_CONTEXT} --source-context ${SOURCE_CONTEXT}
   else
 
     PROXY_USER="$(cut -d':' -f2 <<<"$PROXY_STR" | cut -d'/' -f3)"
@@ -43,7 +43,7 @@ setup_crane() {
     PROXY_HOST="$(cut -d'@' -f2 <<<"$PROXY_STR" | cut -d':' -f1)"
     PROXY_PORT="$(cut -d'@' -f2 <<<"$PROXY_STR" | cut -d':' -f2)"
 
-    ./crane tunnel-api --namespace ${NAMESPACE} --destination-context "${DESTINATION_CONTEXT}" --source-context "${SOURCE_CONTEXT}" --proxy-host "${PROXY_HOST}" --proxy-port "${PROXY_PORT}" --proxy-user "${PROXY_USER}" --proxy-pass "${PROXY_PASS}"
+    ./crane tunnel-api --namespace ${NAMESPACE} --destination-context ${DESTINATION_CONTEXT} --source-context ${SOURCE_CONTEXT} --proxy-host ${PROXY_HOST} --proxy-port ${PROXY_PORT} --proxy-user ${PROXY_USER} --proxy-pass ${PROXY_PASS}
   fi
 
 }
