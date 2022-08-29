@@ -47,9 +47,9 @@ describe('Setup crane tunnel', () => {
             cy.log(proxy_str);
             cy.log(sourceCluster);
             cy.log(targetCluster);
-            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`, {timeout: 1800000}).then(result => {
+            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`).then(result => {
                 log('init_crane_connection', result);
-            }).its('stdout').should('contain', 'SSL Certificate generation complete');
+            }).its('stdout').should('contain', 'SSL Certificate generation complete', {timeout: 1800000});
             log('setup_crane', $el);
         });
     });
