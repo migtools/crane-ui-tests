@@ -45,6 +45,8 @@ describe('Setup crane tunnel', () => {
             let proxy_str: string;
             ($el.stdout == '') ? proxy_str = '' : proxy_str = $el.stdout.split(": ")[1].trim()
             cy.log(proxy_str);
+            cy.log(sourceCluster);
+            cy.log(targetCluster);
             cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`, {timeout: 1800000}).then(result => {
                 log('init_crane_connection', result);
             }).its('stdout').should('contain', 'SSL Certificate generation complete');
