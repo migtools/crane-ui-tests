@@ -4,15 +4,29 @@
   "supportFile": "cypress/support/commands.js",
   "video": false,
   "env": {
-        "user": "",
-        "password": "",
-        "craneUrl": "",
-        "sourceCluster": "",
-        "targetCluster": ""
-   },
+    "user": "kubeadmin",
+    "pass": "best-password-ever",
+    "craneUrl": "https://migration-openshift-migration.apps.devcluster.openshift.com",
+    "sourceCluster": "https://api.cam-src.devcluster.openshift.com:6443 -u kubeadmin -p password",
+    "targetCluster": "https://api.cam.tgt.devcluster.openshift.com:6443 -u kubeadmin -p password"
+  },
+  "reporter": "cypress-multi-reporters",
+  "reporterOptions": {
+    "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+    "cypressMochawesomeReporterReporterOptions": {
+      "reportDir": "cypress/reports",
+      "charts": true,
+      "reportPageTitle": "MTC UI test report",
+      "embeddedScreenshots": true,
+      "inlineAssets": true
+    },
+    "mochaJunitReporterReporterOptions": {
+      "mochaFile": "cypress/reports/junit/results-[hash].xml"
+    }
+  },
+  "defaultCommandTimeout": 10000,
   "retries": {
-        "runMode": 3,
-        "openMode": 3
-   },
-  "defaultCommandTimeout": 10000
+    "runMode": 3,
+    "openMode": 3
+  }
 }

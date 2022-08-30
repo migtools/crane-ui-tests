@@ -44,9 +44,12 @@ describe('Setup crane tunnel', () => {
         run_command_oc('source', 'get proxy -o yaml | grep \'httpProxy\' | head -1').then(($el) => {
             let proxy_str: string;
             ($el.stdout == '') ? proxy_str = '' : proxy_str = $el.stdout.split(": ")[1].trim()
-            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`, {timeout: 1800000})
-                .its('stdout')
-                .should('contain', 'SSL Certificate generation complete');
+            cy.log(proxy_str);
+            cy.log(sourceCluster);
+            cy.log(targetCluster);
+            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`).then(result => {
+                log('init_crane_connection', result);
+            }).its('stdout').should('contain', 'SSL Certificate generation complete', {timeout: 1800000});
             log('setup_crane', $el);
         });
     });

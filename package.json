@@ -7,6 +7,7 @@
     "dependencies": {
         "@testing-library/cypress": "^7.0.5",
         "cypress": "^7.1.0",
+        "cypress-mochawesome-reporter": "^3.2.2",
         "cypress-multi-reporters": "^1.5.0",
         "faker": "^5.5.3",
         "junit-report-merger": "^3.0.2",
