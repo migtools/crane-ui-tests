@@ -121,12 +121,8 @@ export function validateAppMigrationInTargetCluster(planData: PlanData) {
 }
 
 export function validateAppMigration(planData: PlanData) {
-
-    loginToTarget();
-
     planData.namespaceList.forEach((namespace) => {
         runCommand(`curl \"$(oc get routes -n ${namespace} | grep django | awk '{print $2}')\"`)
             .its('code').should('equal', '0');
     });
-
 }
