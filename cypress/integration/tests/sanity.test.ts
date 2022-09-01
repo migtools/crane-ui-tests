@@ -56,11 +56,10 @@ selectorTuple.forEach(($type) => {
 
     describe(`'${migrationType}'`, () => {
 
-        // run before the all coming tests
-        before('Setting up Clusters', () => {
-            // cy.wait(10000)
-            if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
+        // if this is a state migraiton or scc, then check there are more than 1 sc available, if not, then skip the test
+        if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
+            before('Check SC', () => {
                 (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
                 if (planData.migration_type == 'Storage class conversion') {
@@ -69,6 +68,13 @@ selectorTuple.forEach(($type) => {
                         skipOn(count <= 2)
                     });
                 }
+            });
+        }
+
+        // run before the all coming tests
+        it('Setting up Clusters', () => {
+            // cy.wait(10000)
+            if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
                 cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_source_cluster'`, result)
