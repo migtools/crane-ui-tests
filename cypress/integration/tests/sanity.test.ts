@@ -15,15 +15,20 @@ import {
     IntraClusterStateSource,
     IntraClusterStateTarget
 } from './cluster_config';
-import {login, log} from '../../utils/utils';
+import {login} from '../../utils/utils';
 import {Plan} from '../models/plan'
 import {PlanData} from '../types/types';
-import {run_command_oc} from "../../utils/oc_wrapper";
+import {
+    cleanUpCluster,
+    cleanUpSourceCluster, cleanUpTargetCluster,
+    run_command_oc,
+    setupSourceCluster,
+    setupTargetCluster, validateAppMigrationInSourceCluster, validateAppMigrationInTargetCluster
+} from "../../utils/oc_wrapper";
 import {skipOn} from '@cypress/skip-test'
 
 const sourceCluster = Cypress.env('sourceCluster');
 const targetCluster = Cypress.env('targetCluster');
-const configurationScript = "./cypress/utils/configuration_script.sh"
 
 const plan = new Plan();
 
@@ -51,8 +56,7 @@ const selectorTuple: [PlanData, string][] = [
 
 selectorTuple.forEach(($type) => {
     const [planData, migrationType] = $type;
-    let selectedCluster = null
-
+    let selectedCluster = (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
     describe(`'${migrationType}'`, () => {
 
@@ -60,7 +64,6 @@ selectorTuple.forEach(($type) => {
         if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
             before('Check SC', () => {
-                (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
                 if (planData.migration_type == 'Storage class conversion') {
                     run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
@@ -75,18 +78,10 @@ selectorTuple.forEach(($type) => {
         it('Setting up Clusters', () => {
             // cy.wait(10000)
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
-
-                cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
-                    log(`'${migrationType}_setup_source_cluster'`, result)
-                });
-
+                selectedCluster == sourceCluster ? setupSourceCluster(planData) : setupTargetCluster(planData);
             } else {
-                cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000}).then((result) => {
-                    log(`'${migrationType}_setup_source_cluster'`, result)
-                });
-                cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, {timeout: 200000}).then((result) => {
-                    log(`'${migrationType}_setup_target_cluster'`, result)
-                });
+                setupSourceCluster(planData);
+                cleanUpCluster(planData);
             }
         });
 
@@ -128,16 +123,12 @@ selectorTuple.forEach(($type) => {
         after('Validate Migration & clean resources', () => {
 
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
-                cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${selectedCluster}`, {timeout: 100000}).then((result) => {
-                    log(`'${migrationType}_post_migration_verification_on_target'`, result)
-                });
+                selectedCluster == sourceCluster ? validateAppMigrationInSourceCluster(planData) : validateAppMigrationInTargetCluster(planData);
+                selectedCluster == sourceCluster ? cleanUpSourceCluster(planData) : cleanUpTargetCluster(planData);
             } else {
-                cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, {timeout: 100000}).then((result) => {
-                    log(`'${migrationType}_post_migration_verification_on_target'`, result)
-                });
-                cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000}).then((result) => {
-                    log(`'${migrationType}_cleanup_source_cluster'`, result)
-                });
+                validateAppMigrationInTargetCluster(planData);
+                cleanUpSourceCluster(planData);
+                cleanUpTargetCluster(planData);
             }
         });
     });
