@@ -98,8 +98,8 @@ export const directMultipleProjects: PlanData = {
   target: 'host',
   repo: 'automatic',
   namespaceList: ['direct-migration-of-multiple-projects-namespace-a', 'direct-migration-of-multiple-projects-namespace-b'],
-  directImageMigration : false,
-  directPvmigration : false,
+  directImageMigration : true,
+  directPvmigration : true,
 }
 
 export const changeTargetNamespace: PlanData = {
@@ -109,8 +109,8 @@ export const changeTargetNamespace: PlanData = {
   target: 'host',
   repo: 'automatic',
   namespaceList: ['direct-migration-with-nondefault-target-namespace'],
-  directImageMigration : false,
-  directPvmigration : false,
+  directImageMigration : true,
+  directPvmigration : true,
   nondefaultTargetNamespace : true,
 };
 
