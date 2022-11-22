@@ -43,7 +43,7 @@ export class Cluster {
         clickByText(closeWizard, 'Close');
     }
 
-    removeCluster(clusterName: String) {
+    removeCluster(clusterName: string) {
         cy.get('td')
             .contains(clusterName)
             .parent('tr')
@@ -54,7 +54,7 @@ export class Cluster {
         clickByText(confirm, 'Confirm');
     }
 
-    waitForConnected(ClusterName: String) {
+    waitForConnected(ClusterName: string) {
         cy.get('td')
             .contains(ClusterName, {timeout: 10000})
             .closest('tr')

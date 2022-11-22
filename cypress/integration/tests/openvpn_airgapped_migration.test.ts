@@ -1,5 +1,5 @@
 import {run_command_oc} from "../../utils/oc_wrapper";
-import {log, login} from "../../utils/utils";
+import {generateRandomStringLowerCaseOnly, log, login} from "../../utils/utils";
 import {Cluster} from "../models/cluster";
 import {Plan} from "../models/plan";
 import {PlanData} from "../types/types";
@@ -12,14 +12,15 @@ const targetCluster = Cypress.env('targetCluster');
 
 const plan = new Plan();
 const cluster = new Cluster()
-const clusterName = 'vpn-tunnel-source'
+const clusterName = `openvpn-${generateRandomStringLowerCaseOnly(5)}-namespace`;
+const openvpnNamespace = `source-tunnel-${generateRandomStringLowerCaseOnly(3)}`;
 
 // prepare planData for direct and indirect migration
 const dataPlans: PlanData[] = [
     {
         name: 'indirect-air-gapped-migration',
         migration_type: 'Full migration',
-        source: `${clusterName}`,
+        source: `${openvpnNamespace}`,
         target: 'host',
         repo: 'automatic',
         namespaceList: ['indirect-air-gapped-namespace'],
@@ -29,7 +30,7 @@ const dataPlans: PlanData[] = [
     {
         name: 'direct-air-gapped-migration',
         migration_type: 'Full migration',
-        source: `${clusterName}`,
+        source: `${openvpnNamespace}`,
         target: 'host',
         repo: 'automatic',
         namespaceList: ['direct-air-gapped-namespace'],
@@ -42,28 +43,25 @@ describe('Setup crane tunnel', () => {
 
     it('Initialize crane connection', () => {
         run_command_oc('source', 'get proxy -o yaml | grep \'httpProxy\' | head -1').then(($el) => {
-            let proxy_str: string;
-            ($el.stdout == '') ? proxy_str = '' : proxy_str = $el.stdout.split(": ")[1].trim()
-            cy.log(proxy_str);
-            cy.log(sourceCluster);
-            cy.log(targetCluster);
-            cy.exec(`"${craneConfigurationScript}" setup_crane ${sourceCluster} ${targetCluster} "${proxy_str}"`).then(result => {
-                log('init_crane_connection', result);
-            }).its('stdout').should('contain', 'SSL Certificate generation complete', {timeout: 1800000});
-            log('setup_crane', $el);
+            let command: string;
+            ($el.stdout == '') ?
+                command = `"${craneConfigurationScript}" setup_crane ${openvpnNamespace} ${sourceCluster} ${targetCluster}` :
+                command = `"${craneConfigurationScript}" setup_crane ${openvpnNamespace} ${sourceCluster} ${targetCluster} "${$el.stdout.split(": ")[1].trim()}"`
+            cy.exec(command, {timeout: 1800000}).then(result => {
+                expect(result.stdout).to.contain('SSL Certificate generation complete');
+            });
         });
     });
 
     // login and wait some time
-    it('wait 10 minutes & login', () => {
-        cy.wait(1500000);
+    it('Login', () => {
         login();
     });
 
     it('Add new tunneled connection cluster', () => {
         run_command_oc('source', "sa get-token -n openshift-migration migration-controller").then(($el) => {
-            const url = 'https://proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:8443'
-            const registry_path = 'proxied-cluster.openvpn-tunnel-namespace.svc.cluster.local:5000'
+            const url = `https://proxied-cluster.${openvpnNamespace}.svc.cluster.local:8443`
+            const registry_path = `proxied-cluster.${openvpnNamespace}.svc.cluster.local:5000`
             const clusterData = {
                 name: clusterName,
                 url: url,
