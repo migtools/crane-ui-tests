@@ -12,15 +12,15 @@ const targetCluster = Cypress.env('targetCluster');
 
 const plan = new Plan();
 const cluster = new Cluster()
-const clusterName = `openvpn-${generateRandomStringLowerCaseOnly(5)}-namespace`;
-const openvpnNamespace = `source-tunnel-${generateRandomStringLowerCaseOnly(3)}`;
+const openvpnNamespace = `openvpn-namespace`;
+const clusterName = `source-tunnel-${generateRandomStringLowerCaseOnly(3)}`;
 
 // prepare planData for direct and indirect migration
 const dataPlans: PlanData[] = [
     {
         name: 'indirect-air-gapped-migration',
         migration_type: 'Full migration',
-        source: `${openvpnNamespace}`,
+        source: `${clusterName}`,
         target: 'host',
         repo: 'automatic',
         namespaceList: ['indirect-air-gapped-namespace'],
@@ -30,7 +30,7 @@ const dataPlans: PlanData[] = [
     {
         name: 'direct-air-gapped-migration',
         migration_type: 'Full migration',
-        source: `${openvpnNamespace}`,
+        source: `${clusterName}`,
         target: 'host',
         repo: 'automatic',
         namespaceList: ['direct-air-gapped-namespace'],
