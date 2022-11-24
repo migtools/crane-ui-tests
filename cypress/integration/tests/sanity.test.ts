@@ -63,8 +63,8 @@ selectorTuple.forEach(($type) => {
                 (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
                 if (planData.migration_type == 'Storage class conversion') {
-                    run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
-                        let count: number = result.stdout
+                    run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result: any) => {
+                        let count: number = parseInt(result.stdout)
                         skipOn(count <= 2)
                     });
                 }
