@@ -19,7 +19,7 @@ export function inputText(fieldId: string, text: string): void {
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
-  cy.wait(500).contains(fieldId, buttonText).click();
+    cy.wait(500).contains(fieldId, buttonText).click();
 }
 
 export function click(fieldId: string): void {
@@ -39,13 +39,13 @@ export function login(): void {
 }
 
 export function next(): void {
-  cy.wait(2000);
-  clickByText('button', 'Next');
+    cy.wait(2000);
+    clickByText('button', 'Next');
 }
 
 export function back(): void {
-  cy.wait(2000);
-  clickByText('button', 'Back');
+    cy.wait(2000);
+    clickByText('button', 'Back');
 }
 
 export function selectFromDroplist(selector: string, selectionMade: string): void {
@@ -100,11 +100,27 @@ export function editTargetNamespace(namespace): void {
     click(saveEdit);
 }
 
-
 export function log(fileName: string, result: any) {
     const {code, stdout, stderr} = result
     if (code != 0) {
         cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_err.txt', stderr)
     }
     cy.writeFile('./cypress/reports/' + fileName.replace(' ', '_') + '_output.txt', stdout)
+}
+
+export function generateRandomString(length: number, charsToUse?: string) {
+    let randomString = "";
+    (charsToUse == '') ? charsToUse = "aAbBcCdDeEfFgGhHiIjJkKlLmNnoOpPqQrRsStTuUvVwWxXyYzZ" : charsToUse;
+    for (let i = 0; i < length; i++) {
+        randomString += charsToUse.charAt(Math.floor(Math.random() * charsToUse.length));
+    }
+    return randomString;
+}
+
+export function generateRandomStringLowerCaseOnly(length: number) {
+    return generateRandomString(length, "abcdefghijklmnopqrstuvwxyz");
+}
+
+export function generateRandomStringUpperCaseOnly(length: number) {
+    return generateRandomString(length, "ABCDEFGHIJKLMOPQRSTUVWXYZ");
 }
