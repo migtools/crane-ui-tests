@@ -76,14 +76,17 @@ selectorTuple.forEach(($type) => {
             // cy.wait(10000)
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
+                cy.exec(selectedCluster, {failOnNonZeroExit: false})
                 cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_source_cluster'`, result)
                 });
 
             } else {
+                cy.exec(sourceCluster, {failOnNonZeroExit: false})
                 cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_source_cluster'`, result)
                 });
+                cy.exec(targetCluster, {failOnNonZeroExit: false})
                 cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, {timeout: 200000}).then((result) => {
                     log(`'${migrationType}_setup_target_cluster'`, result)
                 });
@@ -128,13 +131,16 @@ selectorTuple.forEach(($type) => {
         after('Validate Migration & clean resources', () => {
 
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
+                cy.exec(selectedCluster, {failOnNonZeroExit: false})
                 cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${selectedCluster}`, {timeout: 100000}).then((result) => {
                     log(`'${migrationType}_post_migration_verification_on_target'`, result)
                 });
             } else {
+                cy.exec(targetCluster, {failOnNonZeroExit: false})
                 cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, {timeout: 100000}).then((result) => {
                     log(`'${migrationType}_post_migration_verification_on_target'`, result)
                 });
+                cy.exec(sourceCluster, {failOnNonZeroExit: false})
                 cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000}).then((result) => {
                     log(`'${migrationType}_cleanup_source_cluster'`, result)
                 });
