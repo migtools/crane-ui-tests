@@ -77,7 +77,7 @@ export class Openshift {
     private createProject(namespace: string) {
         cy
             .exec(`oc new-project ${namespace}`)
-            .wait(10000);
+            .wait(60000);
     }
 
     private deployApp(app: string) {
