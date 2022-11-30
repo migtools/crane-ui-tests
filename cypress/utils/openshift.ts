@@ -77,10 +77,9 @@ export class Openshift {
     }
 
     private deployApp(app: string, namespace: string) {
-        cy.exec(`oc new-app -n ${namespace} ${app}`, {timeout: 10000}).then(result => {
-            cy.writeFile("deploy-app-error.txt", result.stderr)
-        });
-        cy.wait(10000)
+        cy
+            .exec(`oc new-app -n ${namespace} ${app}`, {timeout: 10000})
+            .wait(10000);
     }
 
     assertAppMigrated(namespaceList: [string]) {
