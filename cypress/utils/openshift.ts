@@ -109,6 +109,6 @@ export class Openshift {
 
     private createProject(namespace: string) {
         cy.exec(`oc new-project ${namespace}`);
-        cy.wait(5000)
+        cy.wait(10000)
     }
 }
