@@ -20,6 +20,7 @@
 // }
 
 // todo: implement decorator to login automatically instead of calling the login in every method
+
 export class Openshift {
     urlEndpoint;
     username;
@@ -43,7 +44,7 @@ export class Openshift {
         cy.exec(
             `oc login ${urlEndpoint} -u ${username} -p ${password} --insecure-skip-tls-verify`.replace("\"", "").replace("\"", ""),
             {
-                failOnNonZeroExit: failOnNonZeroExit,
+                failOnNonZeroExit: true,
             }
         );
     }
@@ -62,7 +63,7 @@ export class Openshift {
                     .then((result) => {
                         expect(result.stdout).to.contain(`\"${namespace}\" deleted`);
                     })
-                    .wait(10000);
+                    .wait(15000);
             }
         });
     }
@@ -76,7 +77,7 @@ export class Openshift {
 
     private createProject(namespace: string) {
         cy
-            .exec(`oc new-project ${namespace}`)
+            .exec(`oc new-project ${namespace}`, {failOnNonZeroExit: false})
             .wait(60000);
     }
 
