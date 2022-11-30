@@ -42,7 +42,7 @@ export class Openshift {
         // todo: fix extra double quotation issue :/
         cy.log(`Logging in to ${urlEndpoint.indexOf('tgt') >= 0 ? 'target' : 'source'} cluster`)
         cy.exec(
-            `oc login ${urlEndpoint} -u ${username} -p ${password} --insecure-skip-tls-verify`.replace(/\s+/g, ' ').trim().replace("\"", "").replace("\"", ""),
+            `oc login ${urlEndpoint} -u ${username} -p ${password} --insecure-skip-tls-verify`.replace("\"", "").replace("\"", ""),
             {
                 failOnNonZeroExit: true,
             }
@@ -63,7 +63,7 @@ export class Openshift {
                     .then((result) => {
                         expect(result.stdout).to.contain(`\"${namespace}\" deleted`);
                     })
-                    .wait(15000);
+                    .wait(10000);
             }
         });
     }
@@ -78,7 +78,7 @@ export class Openshift {
     private createProject(namespace: string) {
         cy
             .exec(`oc new-project ${namespace}`, {failOnNonZeroExit: false})
-            .wait(60000);
+            .wait(10000);
     }
 
     private deployApp(app: string) {

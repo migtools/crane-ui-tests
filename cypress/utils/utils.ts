@@ -131,5 +131,7 @@ export function splitLoginString(clusterLoginString: string) {
         .replace('-u ', '')
         .replace('-p ','')
         .replace(' --insecure-skip-tls-verify','')
+        .replace(/\s+/g, ' ')
+        .trim()
         .split(' ')
 }
