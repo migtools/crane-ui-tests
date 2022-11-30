@@ -5,10 +5,10 @@
   "video": false,
   "env": {
     "user": "kubeadmin",
-    "pass": "best-password-ever",
-    "craneUrl": "https://migration-openshift-migration.apps.devcluster.openshift.com",
-    "sourceCluster": "https://api.cam-src.devcluster.openshift.com:6443 -u kubeadmin -p password",
-    "targetCluster": "https://api.cam.tgt.devcluster.openshift.com:6443 -u kubeadmin -p password"
+    "password": "IJxhS-VwHyA-YnMGy-MEM4B",
+    "craneUrl": "https://migration-openshift-migration.apps.cam-tgt-48070.qe.devcluster.openshift.com",
+    "sourceCluster": "\"oc login https://api.cam-src-48070.qe.devcluster.openshift.com:6443 -u kubeadmin -p eP2Ub-AVF62-V4rXh-uxVDM --insecure-skip-tls-verify\"",
+    "targetCluster": "\"oc login https://api.cam-tgt-48070.qe.devcluster.openshift.com:6443 -u kubeadmin -p IJxhS-VwHyA-YnMGy-MEM4B --insecure-skip-tls-verify\""
   },
   "reporter": "cypress-multi-reporters",
   "reporterOptions": {
