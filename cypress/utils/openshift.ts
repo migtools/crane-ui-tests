@@ -78,9 +78,7 @@ export class Openshift {
 
     private deployApp(app: string, namespace: string) {
         cy.exec(`oc new-app -n ${namespace} ${app}`, {timeout: 10000}).then(result => {
-            if ( result.code != 0 ){
-                cy.log(result.stderr)
-            }
+            cy.writeFile("deploy-app-error.txt", result.stderr)
         });
         cy.wait(10000)
     }
