@@ -70,15 +70,19 @@ export class Openshift {
     private createProjects(namespaceList: [string], deployApp: boolean = true) {
         namespaceList.forEach((namespace) => {
             this.createProject(namespace);
-            if (deployApp) {
-                this.deployApp("django-psql-persistent", namespace);
-            }
+            this.deployApp("django-psql-persistent");
         });
     }
 
-    private deployApp(app: string, namespace: string) {
+    private createProject(namespace: string) {
         cy
-            .exec(`oc new-app -n ${namespace} ${app}`, {timeout: 10000})
+            .exec(`oc new-project ${namespace}`)
+            .wait(10000);
+    }
+
+    private deployApp(app: string) {
+        cy
+            .exec(`oc new-app ${app}`, {timeout: 10000})
             .wait(10000);
     }
 
@@ -105,11 +109,6 @@ export class Openshift {
     deleteAllMigrationPlans() {
         this.login(this.urlEndpoint, this.username, this.password);
         cy.exec("oc delete migplan --all -n openshift-migration");
-        cy.wait(10000)
-    }
-
-    private createProject(namespace: string) {
-        cy.exec(`oc new-project ${namespace}`);
         cy.wait(10000)
     }
 }
