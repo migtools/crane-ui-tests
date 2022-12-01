@@ -59,7 +59,7 @@ export class Openshift {
     private deleteProject(namespace: string) {
         cy.exec('oc get ns').then(result => {
             if (result.stdout.indexOf(namespace) >= 0) {
-                cy.exec(`oc delete project ${namespace}`, {timeout: 10000})
+                cy.exec(`oc delete project ${namespace}`, {timeout: 60000})
                     .then((result) => {
                         expect(result.stdout).to.contain(`\"${namespace}\" deleted`);
                     })
@@ -83,7 +83,7 @@ export class Openshift {
 
     private deployApp(app: string) {
         cy
-            .exec(`oc new-app ${app}`, {timeout: 10000})
+            .exec(`oc new-app ${app}`, {timeout: 60000})
             .wait(10000);
     }
 

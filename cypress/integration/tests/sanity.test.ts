@@ -65,8 +65,10 @@ selectorTuple.forEach(($type) => {
             const targetValues = splitLoginString(targetClusterString);
 
             // initiate source and target clusters objects from Openshift object
-            sourceCluster = new Openshift(sourceValues[0], sourceValues[1], sourceValues[2])
-            targetCluster = new Openshift(targetValues[0], targetValues[1], targetValues[2])
+            sourceCluster = new Openshift(sourceValues[0], sourceValues[1], sourceValues[2]);
+            targetCluster = new Openshift(targetValues[0], targetValues[1], targetValues[2]);
+
+            (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
             // clean all the migration plans before starting
             targetCluster.deleteAllMigrationPlans()
@@ -76,7 +78,6 @@ selectorTuple.forEach(($type) => {
         // if this is a state migraiton or scc, then check there are more than 1 sc available, if not, then skip the test
         if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
-            (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
             before('Check SC', () => {
                 // todo: create a method in the Openshit object to get the storage class count
@@ -88,7 +89,7 @@ selectorTuple.forEach(($type) => {
                 }
             });
 
-            it(`Setting up ${( planData.source == 'host' ) ? 'target' : 'source'} cluster`, () => {
+            it(`Setting up ${(planData.source == 'host') ? 'target' : 'source'} cluster`, () => {
                 selectedCluster.setupCluster(planData.namespaceList);
             });
 
@@ -147,6 +148,7 @@ selectorTuple.forEach(($type) => {
 
             } else {
                 // assert the application has successfully migrated
+                // todo: if the migration fails the following step should be skipped
                 targetCluster.assertAppMigrated(planData.namespaceList)
 
                 // delete all the projects in both clusters

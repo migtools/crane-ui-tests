@@ -132,13 +132,20 @@ export class Plan {
     }
 
     protected waitForSuccess(name: string): void {
+        const statuses = ['Migration succeeded','Cutover failed','Completed with warnings']
+        const regex = new RegExp(`${statuses.join('|')}`, 'g')
+
         cy.get('th')
             .contains(name, {timeout: 10000})
             .closest('tr')
             .within(() => {
-                // todo: find a way to skip timeout from 30 minutes when a migration fails
-                // !cy.get(dataLabel.status).contains('Cutover failed', {timeout: 1900000})
-                cy.get(dataLabel.status).contains('Migration succeeded', {timeout: 1900000});
+                cy
+                    .get(dataLabel.status)
+                    .contains(regex, {timeout: 1900000})
+                    .invoke('attr', 'value')
+                    .then(text => {
+                        expect(text).to.equal('Migration succeeded')
+                    })
             });
     }
 
