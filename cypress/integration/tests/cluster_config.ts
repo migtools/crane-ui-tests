@@ -23,7 +23,7 @@ export const noVerifyCopyPlanData: PlanData = {
   target: 'host',
   repo: 'automatic',
   migration_type: 'Full migration',
-  namespaceList: ['migration-without-verify-copy-namespace'],
+  namespaceList: ['indirect-without-verify-copy'],
   directImageMigration : false,
   directPvmigration : false,
 };
@@ -34,7 +34,7 @@ export const verifyCopyPlanData: PlanData = {
   target: 'host',
   migration_type: 'Full migration',
   repo: 'automatic',
-  namespaceList: ['migration-with-copy-verify-namespace'],
+  namespaceList: ['migration-with-copy-verify'],
   verifyCopy : true,
 };
 
@@ -44,7 +44,7 @@ export const directPvPlanData: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['direct-pv-migration-namespace'],
+  namespaceList: ['direct-pv-migration'],
   directPvmigration : true,
 }
 
@@ -54,7 +54,7 @@ export const verifyCopydirectPvPlan: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['direct-pv-migration-with-copy-verify-namespace'],
+  namespaceList: ['direct-pv-migration-with-copy-verify'],
   directPvmigration : true,
   verifyCopy : true,
 }
@@ -65,7 +65,7 @@ export const directImagePlanData: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['direct-image-migration-namespace'],
+  namespaceList: ['direct-image-migration'],
   directImageMigration : true,
 }
 
@@ -75,7 +75,7 @@ export const directImagePvPlan: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['direct-image-pv-migration-namespace'],
+  namespaceList: ['direct-image-pv-migration'],
   directImageMigration : true,
   directPvmigration : true,
 }
@@ -86,41 +86,41 @@ export const indirectMultipleProjects: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['indirect-migration-of-multiple-projects-namespace-a', 'indirect-migration-of-multiple-projects-namespace-b'],
+  namespaceList: ['indirect-multiple-projects-a', 'indirect-multiple-projects-b'],
   directImageMigration : false,
   directPvmigration : false,
 }
 
 export const directMultipleProjects: PlanData = {
-  name: 'direct-migration-of-multiple-projects',
+  name: 'direct-multiple-projects',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['direct-migration-of-multiple-projects-namespace-a', 'direct-migration-of-multiple-projects-namespace-b'],
+  namespaceList: ['direct-multiple-projects-a', 'direct-multiple-projects-b'],
   directImageMigration : true,
   directPvmigration : true,
 }
 
 export const changeTargetNamespace: PlanData = {
-  name: 'direct-migration-with-nondefault-target-namespace',
+  name: 'direct-migration-with-nondefault-target',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['direct-migration-with-nondefault-target-namespace'],
+  namespaceList: ['direct-nondefault-target'],
   directImageMigration : true,
   directPvmigration : true,
   nondefaultTargetNamespace : true,
 };
 
 export const IndirectChangeTargetNamespace: PlanData = {
-  name: 'indirect-migration-with-nondefault-target-namespace',
+  name: 'indirect-migration-with-nondefault-target',
   migration_type: 'Full migration',
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['indirect-migration-with-nondefault-target-namespace'],
+  namespaceList: ['indirect-migration-with-nondefault-target'],
   directImageMigration : false,
   directPvmigration : false,
   nondefaultTargetNamespace : true,
@@ -131,7 +131,7 @@ export const storageClassConversionSource: PlanData = {
   migration_type: 'Storage class conversion',
   source: 'source-cluster',
   repo: 'automatic',
-  namespaceList: ['scc-source-namespace']
+  namespaceList: ['scc-source']
 }
 
 export const storageClassConversionTarget: PlanData = {
@@ -139,7 +139,7 @@ export const storageClassConversionTarget: PlanData = {
   migration_type: 'Storage class conversion',
   source: 'host',
   repo: 'automatic',
-  namespaceList: ['scc-target-namespace']
+  namespaceList: ['scc-target']
 }
 
 export const InterclusterState: PlanData = {
@@ -148,7 +148,7 @@ export const InterclusterState: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['inter-state-plan-namespace']
+  namespaceList: ['inter-state-plan']
 }
 
 export const IntraClusterStateSource: PlanData = {
