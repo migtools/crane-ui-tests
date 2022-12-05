@@ -120,7 +120,7 @@ export const IndirectChangeTargetNamespace: PlanData = {
   source: 'source-cluster',
   target: 'host',
   repo: 'automatic',
-  namespaceList: ['indirect-migration-with-nondefault-target'],
+  namespaceList: ['indirect-nondefault-target'],
   directImageMigration : false,
   directPvmigration : false,
   nondefaultTargetNamespace : true,
