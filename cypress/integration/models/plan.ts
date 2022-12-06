@@ -142,9 +142,8 @@ export class Plan {
                 cy
                     .get(dataLabel.status)
                     .contains(regex, {timeout: 1900000})
-                    .invoke('attr', 'value')
-                    .then(text => {
-                        expect(text).to.equal('Migration succeeded')
+                    .then($a => {
+                        expect($a.text()).to.equal('Migration succeeded')
                     })
             });
     }
