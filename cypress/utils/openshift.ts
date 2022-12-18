@@ -20,7 +20,7 @@
 // }
 
 // todo: implement decorator to login automatically instead of calling the login in every method
-
+// test oush
 export class Openshift {
     urlEndpoint;
     username;
