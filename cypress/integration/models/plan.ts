@@ -18,6 +18,7 @@ import {
     kebabDropDownItem,
     targetStorageClass
 } from '../views/plan.view';
+import {run_command_oc} from "../../utils/oc_wrapper";
 
 
 export class Plan {
@@ -275,5 +276,14 @@ export class Plan {
         clickByText('button', 'Rollback');
 
         this.waitForRollbackSuccess(name);
+    }
+
+    assertRollbackDataCleaned(planData: PlanData) {
+        const { namespaceList } = planData;
+
+        namespaceList.forEach(namespace => {
+            run_command_oc('target',`-n ${namespace} get all | sed -n '/imagestream./!p' | sed -n '/NAME/!p' | wc -l`)
+                .its("stdout").should('eq',0)
+        });
     }
 }
