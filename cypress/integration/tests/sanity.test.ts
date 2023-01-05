@@ -64,7 +64,7 @@ selectorTuple.forEach(($type) => {
 
                 if (planData.migration_type == 'Storage class conversion') {
                     run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
-                        let count: number = result.stdout
+                        let count: number = parseInt(result.stdout)
                         skipOn(count <= 2)
                     });
                 }
@@ -109,6 +109,7 @@ selectorTuple.forEach(($type) => {
         if (`${migrationType}`.indexOf('Rollover') >= 0) {
             it('Execute Rollback', () => {
                 plan.rollback(planData);
+                plan.assertRollbackDataCleaned(planData);
             });
         }
 
