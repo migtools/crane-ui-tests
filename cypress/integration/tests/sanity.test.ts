@@ -15,17 +15,19 @@ import {
     IntraClusterStateSource,
     IntraClusterStateTarget
 } from './cluster_config';
-import {login, log} from '../../utils/utils';
+import {login, splitLoginString} from '../../utils/utils';
 import {Plan} from '../models/plan'
 import {PlanData} from '../types/types';
 import {run_command_oc} from "../../utils/oc_wrapper";
 import {skipOn} from '@cypress/skip-test'
+import {Openshift} from "../../utils/openshift";
 
-const sourceCluster = Cypress.env('sourceCluster');
-const targetCluster = Cypress.env('targetCluster');
-const configurationScript = "./cypress/utils/configuration_script.sh"
+const sourceClusterString = Cypress.env('sourceCluster');
+const targetClusterString = Cypress.env('targetCluster');
 
 const plan = new Plan();
+let targetCluster;
+let sourceCluster;
 
 const selectorTuple: [PlanData, string][] = [
     [directImagePlanData, 'Direct image migration without copy verification'],
@@ -56,12 +58,29 @@ selectorTuple.forEach(($type) => {
 
     describe(`'${migrationType}'`, () => {
 
+        before("Create cluster objects", () => {
+
+            // split the login string for the source and target clusters
+            const sourceValues = splitLoginString(sourceClusterString);
+            const targetValues = splitLoginString(targetClusterString);
+
+            // initiate source and target clusters objects from Openshift object
+            sourceCluster = new Openshift(sourceValues[0], sourceValues[1], sourceValues[2]);
+            targetCluster = new Openshift(targetValues[0], targetValues[1], targetValues[2]);
+
+            (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
+
+            // clean all the migration plans before starting
+            targetCluster.deleteAllMigrationPlans()
+
+        });
+
         // if this is a state migraiton or scc, then check there are more than 1 sc available, if not, then skip the test
         if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
-            before('Check SC', () => {
-                (`${planData.source}` == 'source-cluster') ? selectedCluster = sourceCluster : selectedCluster = targetCluster;
 
+            before('Check SC', () => {
+                // todo: create a method in the Openshit object to get the storage class count
                 if (planData.migration_type == 'Storage class conversion') {
                     run_command_oc((planData.source == 'source-cluster') ? 'source' : 'target', 'get sc | wc -l').then((result) => {
                         let count: number = parseInt(result.stdout)
@@ -69,26 +88,22 @@ selectorTuple.forEach(($type) => {
                     });
                 }
             });
+
+            it(`Setting up ${(planData.source == 'host') ? 'target' : 'source'} cluster`, () => {
+                selectedCluster.setupCluster(planData.namespaceList);
+            });
+
+        } else {
+
+            it('Setting up source cluster', () => {
+                sourceCluster.setupCluster(planData.namespaceList)
+            });
+
+            it('Setting up target cluster', () => {
+                targetCluster.cleanProjects(planData.namespaceList)
+            });
+
         }
-
-        // run before the all coming tests
-        it('Setting up Clusters', () => {
-            // cy.wait(10000)
-            if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
-
-                cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
-                    log(`'${migrationType}_setup_source_cluster'`, result)
-                });
-
-            } else {
-                cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 200000}).then((result) => {
-                    log(`'${migrationType}_setup_source_cluster'`, result)
-                });
-                cy.exec(`"${configurationScript}" setup_target_cluster ${planData.namespaceList} ${targetCluster}`, {timeout: 200000}).then((result) => {
-                    log(`'${migrationType}_setup_target_cluster'`, result)
-                });
-            }
-        });
 
         // login
         it('Login', () => {
@@ -129,16 +144,17 @@ selectorTuple.forEach(($type) => {
         after('Validate Migration & clean resources', () => {
 
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
-                cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${selectedCluster}`, {timeout: 100000}).then((result) => {
-                    log(`'${migrationType}_post_migration_verification_on_target'`, result)
-                });
+                // delete all the projects in the selected cluster
+                selectedCluster.cleanProjects(planData.namespaceList);
+
             } else {
-                cy.exec(`"${configurationScript}" post_migration_verification_on_target ${planData.namespaceList} ${targetCluster}`, {timeout: 100000}).then((result) => {
-                    log(`'${migrationType}_post_migration_verification_on_target'`, result)
-                });
-                cy.exec(`"${configurationScript}" cleanup_source_cluster ${planData.namespaceList} ${sourceCluster}`, {timeout: 100000}).then((result) => {
-                    log(`'${migrationType}_cleanup_source_cluster'`, result)
-                });
+                // assert the application has successfully migrated
+                // todo: if the migration fails the following step should be skipped
+                targetCluster.assertAppMigrated(planData.namespaceList)
+
+                // delete all the projects in both clusters
+                targetCluster.cleanProjects(planData.namespaceList);
+                sourceCluster.cleanProjects(planData.namespaceList);
             }
         });
     });

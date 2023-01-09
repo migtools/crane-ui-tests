@@ -124,3 +124,14 @@ export function generateRandomStringLowerCaseOnly(length: number) {
 export function generateRandomStringUpperCaseOnly(length: number) {
     return generateRandomString(length, "ABCDEFGHIJKLMOPQRSTUVWXYZ");
 }
+
+export function splitLoginString(clusterLoginString: string) {
+    return clusterLoginString
+        .replace('oc login ', '')
+        .replace('-u ', '')
+        .replace('-p ','')
+        .replace(' --insecure-skip-tls-verify','')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .split(' ')
+}
