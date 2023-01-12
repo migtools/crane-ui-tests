@@ -283,7 +283,7 @@ export class Plan {
 
         namespaceList.forEach(namespace => {
             run_command_oc('target',`-n ${namespace} get all | sed -n '/imagestream./!p' | sed -n '/NAME/!p' | wc -l`)
-                .its("stdout").should('eq',0)
+                .its("stdout").should('eq','0')
         });
     }
 }
