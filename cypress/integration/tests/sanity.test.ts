@@ -105,7 +105,7 @@ selectorTuple.forEach(($type) => {
             plan.execute(planData);
         });
 
-        // execute rollback if requried
+        // execute rollback if required
         if (`${migrationType}`.indexOf('Rollover') >= 0) {
             it('Execute Rollback', () => {
                 plan.rollback(planData);
