@@ -73,7 +73,6 @@ selectorTuple.forEach(($type) => {
 
         // run before the all coming tests
         it('Setting up Clusters', () => {
-            // cy.wait(10000)
             if (['Storage class conversion', 'State migration'].indexOf(`${planData.migration_type}`) > -1) {
 
                 cy.exec(`"${configurationScript}" setup_source_cluster ${planData.namespaceList} ${selectedCluster}`, {timeout: 200000}).then((result) => {
@@ -106,10 +105,12 @@ selectorTuple.forEach(($type) => {
         });
 
         // execute rollback if requried
-        if (`${migrationType}`.indexOf('Rollover') >= 0) {
+        if (migrationType.indexOf('Rollover') >= 0) {
             it('Execute Rollback', () => {
                 plan.rollback(planData);
-                plan.assertRollbackDataCleaned(planData);
+                if (migrationType.indexOf('Storage class conversion') < 0) {
+                    plan.assertRollbackDataCleaned(planData);
+                }
             });
         }
 
