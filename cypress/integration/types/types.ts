@@ -23,6 +23,7 @@ export type PlanData = {
   migration_type: string;
   namespaceList : string[];
   verifyCopy?: boolean;
+  liveMigration?: boolean;
   directPvmigration?: boolean;
   directImageMigration?: boolean;
   nondefaultTargetNamespace?: boolean;
