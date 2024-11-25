@@ -1,17 +1,19 @@
-import { result } from "cypress/types/lodash";
-
-const sourceCluster = Cypress.env('sourceCluster')
-const targetCluster = Cypress.env('targetCluster')
+const sourceLoginString = Cypress.env('sourceCluster').replaceAll('"','')
+const targetLoginString = Cypress.env('targetCluster').replaceAll('"','')
 
 
 //Backend Utils
 
 export function loginToSource(): void {
-    cy.exec('oc login ' + sourceCluster + ' --insecure-skip-tls-verify');
+    cy.log("Logging in to source cluster: " + sourceLoginString)
+    cy.exec(sourceLoginString);
+    cy.wait(2000)
 }
   
 export function loginToTarget(): void {
-    cy.exec('oc login ' + targetCluster + ' --insecure-skip-tls-verify');
+    cy.log("Logging in to target cluster: " + targetLoginString)
+    cy.exec(targetLoginString);
+    cy.wait(2000)
 }
 
 export function createProject(namespace: string): void {
@@ -40,7 +42,7 @@ export function create_resource(resource: string): void {
     });
 }
 
-export function run_command_oc(cluster: string, command: string): any {
+export function run_command_oc(cluster: string, command: string) {
 
     if (cluster=="source") {
         loginToSource();
@@ -48,8 +50,6 @@ export function run_command_oc(cluster: string, command: string): any {
     else {
         loginToTarget();
     }
-
     return cy.exec("oc "+ command);
-
 }
   

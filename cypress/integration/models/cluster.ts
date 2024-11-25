@@ -1,33 +1,65 @@
 //import { addCluster, button } from '../types/constants';
-import { clickByText, inputText, openSidebarMenu } from '../../utils/utils';
-import { navMenuPoint } from '../views/menu.view';
-import { ClusterData } from '../types/types';
-import { clusterName, clusterUrl, instanceToken, addButtonModal } from '../views/cluster.view';
+import {click, clickByText, inputText} from '../../utils/utils';
+import {navMenuPoint} from '../views/menu.view';
+import {ClusterData} from '../types/types';
+import {
+    clusterName,
+    clusterUrl,
+    instanceToken,
+    addButtonModal,
+    exposedRegistryPath,
+    addNewCluster,
+    closeWizard,
+    status, confirm
+} from '../views/cluster.view';
+import {kebab, kebabDropDownItem} from "../views/plan.view";
 
 export class Cluster {
-  protected static openLi(): void {
-    //openSidebarMenu();
-    clickByText(navMenuPoint, 'Clusters');
-  }
+    protected static openLi(): void {
+        //openSidebarMenu();
+        clickByText(navMenuPoint, 'Clusters');
+    }
 
-  protected openMenu(): void {
-    //TODO: replace hardcoded timeout by expecting button to become clickable
-    //cy.wait(2000);
-    Cluster.openLi();
-  }
+    protected openMenu(): void {
+        //TODO: replace hardcoded timeout by expecting button to become clickable
+        //cy.wait(2000);
+        Cluster.openLi();
+    }
 
-  protected runWizard(clusterData: ClusterData): void {
-    const { name, url, token } = clusterData;
-    clickByText('button', 'Add cluster');
-    inputText(clusterName, name);
-    inputText(clusterUrl, url);
-    inputText(instanceToken, token);
-    clickByText(addButtonModal, 'Add cluster');
-  }
+    addCluster(clusterData: ClusterData): void {
+        const {name, url, token, registryPath} = clusterData;
+        click(addNewCluster);
+        inputText(clusterName, name);
+        inputText(clusterUrl, url);
+        inputText(instanceToken, token);
+        if (registryPath != null) {
+            inputText(exposedRegistryPath, registryPath)
+        }
+        clickByText(addButtonModal, 'Add cluster');
+        cy.get('div.pf-l-flex').contains('Connection successful', {timeout: 10000})
+    }
 
-  create(clusterData: ClusterData): void {
-    this.openMenu();
-    this.runWizard(clusterData);
-    //this.populate(providerData);
-  }
+    close() {
+        clickByText(closeWizard, 'Close');
+    }
+
+    removeCluster(clusterName: string) {
+        cy.get('td')
+            .contains(clusterName)
+            .parent('tr')
+            .within(() => {
+                click(kebab);
+            });
+        clickByText(kebabDropDownItem, 'Remove');
+        clickByText(confirm, 'Confirm');
+    }
+
+    waitForConnected(ClusterName: string) {
+        cy.get('td')
+            .contains(ClusterName, {timeout: 10000})
+            .closest('tr')
+            .within(() => {
+                cy.get(status).contains('Connected', {timeout: 1900000});
+            });
+    }
 }

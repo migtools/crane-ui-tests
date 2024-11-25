@@ -1,4 +1,4 @@
-import { clickByText, inputText, openSidebarMenu } from '../../utils/utils';
+import { clickByText, inputText } from '../../utils/utils';
 import { navMenuPoint } from '../views/menu.view';
 import { RepoData } from '../types/types';
 import { storageProvider, repoName, bucketName, bucketRegion, providerKey, providerSecret, dataLabel} from '../views/repo.view';
