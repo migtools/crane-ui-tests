@@ -170,13 +170,6 @@ export class Plan {
         this.selectNamespace(planData);
         this.persistentVolumes();
 
-        if(planData.migration_type == 'Storage class conversion'){
-            if(planData.liveMigration){
-                cy.get("#live-migrate").click();
-            }
-            next();
-        }
-
         if (planData.migration_type == 'State migration') {
             this.copyOptions(planData);
         }
