@@ -163,7 +163,7 @@ export class Plan {
     create(planData: PlanData): void {
         const {name} = planData;
 
-        //Navigate to 'Migration plans tab and create a new plan
+        //Navigate to 'Migration plans' tab and create a new plan
         Plan.openList();
         clickByText('button', 'Add migration plan');
         this.generalStep(planData);
@@ -173,8 +173,8 @@ export class Plan {
         if(planData.migration_type == 'Storage class conversion'){
             if(planData.liveMigration){
                 cy.get("#live-migrate").click();
+                next();
             }
-            next();
         }
 
         if (planData.migration_type == 'State migration') {
