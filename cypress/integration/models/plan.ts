@@ -173,8 +173,8 @@ export class Plan {
         if(planData.migration_type == 'Storage class conversion'){
             if(planData.liveMigration){
                 cy.get("#live-migrate").click();
-                next();
             }
+            next();
         }
 
         if (planData.migration_type == 'State migration') {
